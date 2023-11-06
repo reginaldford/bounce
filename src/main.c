@@ -1,5 +1,4 @@
-// Read https://github.com/reginaldford/bounce/blob/main/LICENSE for license
-// info
+// Read https://github.com/reginaldford/bounce/blob/main/LICENSE for license info
 
 #include "bounce.h"
 
@@ -20,13 +19,13 @@ void bounceGiveHelp(char **args) {
 }
 
 int main(int num_args, char **args) {
-  int opt;
-  char *inFilePath = NULL;  // i input file
-  char *keyFilePath = NULL; // k key
-  char *outFilePath = NULL; // o output file (stdout is default)
-  bool decryptFlag = 0;     // d decrypt (enc is default)
-  bool genKeyFlag = 0;      // d decrypt (enc is default)
-  bool optionsWereUsed = 0;
+  int   opt;
+  char *inFilePath      = NULL; // i input file
+  char *keyFilePath     = NULL; // k key
+  char *outFilePath     = NULL; // o output file (stdout is default)
+  bool  decryptFlag     = 0;    // d decrypt (enc is default)
+  bool  genKeyFlag      = 0;    // g generate key
+  bool  optionsWereUsed = 0;
   while ((opt = getopt(num_args, args, "k:di:o:gh")) != -1) {
     optionsWereUsed = 1;
     switch (opt) {
@@ -74,7 +73,6 @@ int main(int num_args, char **args) {
     printf("Could not read key file\n"); // should use stderr
     exit(EXIT_FAILURE);
   }
-
   unsigned char *key = keyFileResult.fileContent;
 
   // Read input file
@@ -90,7 +88,7 @@ int main(int num_args, char **args) {
   unsigned char *input = inFileResult.fileContent;
 
   // Setup the output buffer
-  int inputLen = inFileResult.fileSize;
+  int           inputLen = inFileResult.fileSize;
   unsigned char output[inputLen];
 
   // Process the data
@@ -115,13 +113,15 @@ int main(int num_args, char **args) {
 
     if (fclose(outputFile) != 0) {
       perror("fclose");
-      return 1; // Successfully closed the file
+      return 1;
     }
+    free(input);
     return 0;
   }
 
   // Or Output to stdout
   for (int i = 0; i < inputLen; i++)
     putc(output[i], stdout);
-  return 0; // free things
+  free(input);
+  return 0;
 }

@@ -1,5 +1,4 @@
-// Read https://github.com/reginaldford/bounce/blob/main/LICENSE for license
-// info
+// Read https://github.com/reginaldford/bounce/blob/main/LICENSE for license info
 
 #include <math.h>
 #include <stdbool.h>
@@ -12,9 +11,9 @@
 
 #include "bounceReadFileResult.h"
 
-unsigned char *bounce_encrypt(unsigned char *msg, unsigned int msgLen,
-                              unsigned char *key, unsigned char *output);
-unsigned char *bounce_decrypt(unsigned char *msg, unsigned int msgLen,
-                              unsigned char *key, unsigned char *output);
+unsigned char       *bounce_encrypt(unsigned char *msg, unsigned int msgLen, unsigned char *key,
+                                    unsigned char *output);
+unsigned char       *bounce_decrypt(unsigned char *msg, unsigned int msgLen, unsigned char *key,
+                                    unsigned char *output);
 bounceReadFileResult bounceReadFile(const char *filePath);
-void bounceGenKey(FILE *fp);
+void                 bounceGenKey(FILE *fp);

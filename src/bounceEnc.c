@@ -1,10 +1,9 @@
-// Read https://github.com/reginaldford/bounce/blob/main/LICENSE for license
-// info
+// Read https://github.com/reginaldford/bounce/blob/main/LICENSE for license info
 
 #include "bounce.h"
 
-unsigned char *bounce_encrypt(unsigned char *msg, unsigned int msgLen,
-                              unsigned char *key, unsigned char *output) {
+unsigned char *bounce_encrypt(unsigned char *msg, unsigned int msgLen, unsigned char *key,
+                              unsigned char *output) {
   unsigned char rb;
   // Sum the msg (exclude first byte) and use sum as an index for random byte
   int sum = 0;
