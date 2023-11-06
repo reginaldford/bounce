@@ -20,12 +20,13 @@ void bounceGiveHelp(char **args) {
 
 int main(int num_args, char **args) {
   int   opt;
-  char *inFilePath      = NULL; // i input file
-  char *keyFilePath     = NULL; // k key
-  char *outFilePath     = NULL; // o output file (stdout is default)
-  bool  decryptFlag     = 0;    // d decrypt (enc is default)
-  bool  genKeyFlag      = 0;    // g generate key
-  bool  optionsWereUsed = 0;
+  char *inFilePath      = NULL;   // i input file
+  char *keyFilePath     = NULL;   // k key
+  char *outFilePath     = NULL;   // o output file (stdout is default)
+  FILE *outFile         = stdout; // o output file (stdout is default)
+  bool  decryptFlag     = 0;      // d decrypt (enc is default)
+  bool  genKeyFlag      = 0;      // g generate key
+  bool  optionsWereUsed = 0;      // whether any options where used
   while ((opt = getopt(num_args, args, "k:di:o:gh")) != -1) {
     optionsWereUsed = 1;
     switch (opt) {
@@ -59,7 +60,7 @@ int main(int num_args, char **args) {
 
   // Gen Key is special case
   if (genKeyFlag) {
-    bounceGenKey(stdout);
+    bounceGenKey(outFile);
     return 0;
   }
 
@@ -88,8 +89,8 @@ int main(int num_args, char **args) {
   unsigned char *input = inFileResult.fileContent;
 
   // Setup the output buffer
-  int           inputLen = inFileResult.fileSize;
-  unsigned char output[inputLen];
+  int            inputLen = inFileResult.fileSize;
+  unsigned char *output   = malloc(inputLen);
 
   // Process the data
   if (decryptFlag)
@@ -99,29 +100,23 @@ int main(int num_args, char **args) {
 
   // Perhaps Output to file
   if (outFilePath) {
-    FILE *outputFile = fopen(outFilePath, "wb");
-
-    if (outputFile == NULL) {
+    outFile = fopen(outFilePath, "wb");
+    // Handle fopen error
+    if (outFile == NULL) {
       perror("fopen");
-      // Handle fopen error
       return 1;
     }
-
-    // Writing data to file
-    for (int i = 0; i < inputLen; i++)
-      putc(output[i], outputFile);
-
-    if (fclose(outputFile) != 0) {
-      perror("fclose");
-      return 1;
-    }
-    free(input);
-    return 0;
   }
-
-  // Or Output to stdout
+  // Writing data to file
   for (int i = 0; i < inputLen; i++)
-    putc(output[i], stdout);
+    putc(output[i], outFile);
+
+  // Close output file , if we opened one
+  if (outFilePath && fclose(outFile) != 0)
+    perror("fclose");
+
+  // Clean up and return 0
   free(input);
+  free(output);
   return 0;
 }

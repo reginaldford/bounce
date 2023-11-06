@@ -2,13 +2,15 @@
 
 #include "bounce.h"
 
+// Generate 256 random bytes
 void bounceGenKey(FILE *fp) {
-  const int     num_bytes = 256;
-  unsigned char random_bytes[num_bytes];
-  for (int i = 0; i < num_bytes; i++) {
-    random_bytes[i] = (unsigned char)arc4random();
-  }
-  for (int i = 0; i < num_bytes; i++) {
+  // Each byte of the key is an index into the key (2^8=256)
+  const int key_size = 256;
+  // Buffer
+  unsigned char random_bytes[key_size];
+  // High quality randomness
+  arc4random_buf(random_bytes, key_size);
+  // Output
+  for (int i = 0; i < 256; i++)
     putc(random_bytes[i], fp);
-  }
 }
