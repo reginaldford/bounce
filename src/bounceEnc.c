@@ -13,8 +13,12 @@ unsigned char *bounce_encrypt(unsigned char *msg, unsigned int msgLen, unsigned 
   rb = key[sum % 256];
   // First output byte is input ^ rb
   output[0] = msg[0] ^ rb;
-  // Each iteration uses previous output byte as random byte index
-  for (int i = 1; i < msgLen; i++)
+  // Main encryption loop
+  for (int i = 1; i < msgLen; i++) {
+    // Each iteration uses previous output byte as random byte index
     output[i] = msg[i] ^ key[output[i - 1]];
+    // Key is mutated as we go
+    key[output[i - 1]] = (key[key[output[i - 1]]] + i) % 256;
+  }
   return output;
 }
