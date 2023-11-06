@@ -1,3 +1,6 @@
+// Read https://github.com/reginaldford/bounce/blob/main/LICENSE for license
+// info
+
 #include "bounce.h"
 
 void bounceGiveHelp(char **args) {
@@ -13,16 +16,17 @@ void bounceGiveHelp(char **args) {
   printf("You may also skip -o flag and pipe the output to a file.\n");
   printf("  %s -k myKey.k -i msg.txt.b -d > clear.txt\n", args[0]);
   fflush(stdout);
+  exit(1);
 }
 
 int main(int num_args, char **args) {
-  int   opt;
-  char *inFilePath      = NULL; // i input file
-  char *keyFilePath     = NULL; // k key
-  char *outFilePath     = NULL; // o output file (stdout is default)
-  bool  decryptFlag     = 0;    // d decrypt (enc is default)
-  bool  genKeyFlag      = 0;    // d decrypt (enc is default)
-  bool  optionsWereUsed = 0;
+  int opt;
+  char *inFilePath = NULL;  // i input file
+  char *keyFilePath = NULL; // k key
+  char *outFilePath = NULL; // o output file (stdout is default)
+  bool decryptFlag = 0;     // d decrypt (enc is default)
+  bool genKeyFlag = 0;      // d decrypt (enc is default)
+  bool optionsWereUsed = 0;
   while ((opt = getopt(num_args, args, "k:di:o:gh")) != -1) {
     optionsWereUsed = 1;
     switch (opt) {
@@ -43,7 +47,7 @@ int main(int num_args, char **args) {
       break;
     case 'h':
       bounceGiveHelp(args);
-      return 0;
+      return 1;
       break;
     }
   }
@@ -51,6 +55,7 @@ int main(int num_args, char **args) {
   // If no flags were used, let's give help info
   if (optionsWereUsed == 0) {
     bounceGiveHelp(args);
+    return 1;
   }
 
   // Gen Key is special case
@@ -85,7 +90,7 @@ int main(int num_args, char **args) {
   unsigned char *input = inFileResult.fileContent;
 
   // Setup the output buffer
-  int           inputLen = inFileResult.fileSize;
+  int inputLen = inFileResult.fileSize;
   unsigned char output[inputLen];
 
   // Process the data

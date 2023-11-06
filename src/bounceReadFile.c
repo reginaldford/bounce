@@ -1,15 +1,18 @@
+// Read https://github.com/reginaldford/bounce/blob/main/LICENSE for license
+// info
+
 #include "bounce.h"
 
 // Returns the length
 bounceReadFileResult bounceReadFile(const char *filePath) {
   size_t fileSize = 0;
-  FILE  *file     = fopen(filePath, "rb");
+  FILE *file = fopen(filePath, "rb");
   if (file == NULL) {
     perror("Error opening file");
     bounceReadFileResult result = {
-      .fileExists  = 0,
-      .fileSize    = 0,
-      .fileContent = NULL,
+        .fileExists = 0,
+        .fileSize = 0,
+        .fileContent = NULL,
     };
     return result;
   }
@@ -25,9 +28,9 @@ bounceReadFileResult bounceReadFile(const char *filePath) {
     perror("Error allocating memory");
     fclose(file);
     bounceReadFileResult result = {
-      .fileExists  = 0,
-      .fileSize    = 0,
-      .fileContent = NULL,
+        .fileExists = 0,
+        .fileSize = 0,
+        .fileContent = NULL,
     };
     return result;
   }
@@ -39,9 +42,9 @@ bounceReadFileResult bounceReadFile(const char *filePath) {
     free(fileData);
     fclose(file);
     bounceReadFileResult result = {
-      .fileExists  = 0,
-      .fileSize    = 0,
-      .fileContent = NULL,
+        .fileExists = 0,
+        .fileSize = 0,
+        .fileContent = NULL,
     };
     return result;
   }
@@ -49,9 +52,9 @@ bounceReadFileResult bounceReadFile(const char *filePath) {
   //
   fclose(file);
   bounceReadFileResult result = {
-    .fileExists  = 1,
-    .fileSize    = fileSize,
-    .fileContent = fileData,
+      .fileExists = 1,
+      .fileSize = fileSize,
+      .fileContent = fileData,
   };
   return result;
 }
