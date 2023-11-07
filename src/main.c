@@ -58,6 +58,16 @@ int main(int num_args, char **args) {
     return 1;
   }
 
+  // Perhaps Output to file
+  if (outFilePath) {
+    outFile = fopen(outFilePath, "wb");
+    // Handle fopen error
+    if (outFile == NULL) {
+      perror("fopen");
+      return 1;
+    }
+  }
+
   // Gen Key is special case
   if (genKeyFlag) {
     bounceGenKey(outFile);
@@ -98,15 +108,6 @@ int main(int num_args, char **args) {
   else
     bounce_encrypt(input, inputLen, key, output);
 
-  // Perhaps Output to file
-  if (outFilePath) {
-    outFile = fopen(outFilePath, "wb");
-    // Handle fopen error
-    if (outFile == NULL) {
-      perror("fopen");
-      return 1;
-    }
-  }
   // Writing data to file
   for (int i = 0; i < inputLen; i++)
     putc(output[i], outFile);
