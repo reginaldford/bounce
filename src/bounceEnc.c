@@ -12,10 +12,10 @@ unsigned char *bounce_encrypt(unsigned char *msg, unsigned int msgLen, unsigned 
   return output;
 }
 
-// Each write the output in reverse
+// Each pass writes the output in reverse
 unsigned char *bounce_encrypt_pass(unsigned char *msg, unsigned int msgLen, unsigned char *key,
                                    unsigned char *output) {
-  // mutable key copy
+  // Make a mutable key copy
   unsigned char mKey[256];
   for (int i = 0; i < 256; i++)
     mKey[i] = key[i];

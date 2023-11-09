@@ -14,56 +14,38 @@ unsigned long long bounceTime() {
   return milliseconds;
 }
 
-// Doing something less deterministic
-// By writing and deleting a tmp file
-void bounceSpendTime() {
-  char *filename = ".__bounce_tmp_file_";
-  // Create and open the file
-  FILE *fd = fopen(filename, "wb");
-  if (fd == NULL) {
-    perror("Error creating file");
-    return;
-  }
-  // Using malloc to take time
-  char *data = malloc(1024);
-  for (int i = 0; i < 1024; i++) {
-    data[i] = (char)i;
-  }
-  // Write the data to the file
-  fwrite(data, 1, sizeof(data), fd);
-  // Close and delete
-  fclose(fd);
-  if (unlink(filename) == -1) {
-    perror("Error deleting file");
-  }
-}
-
-// Generate 256 random bytes into fp
-// Improves upon cstd randomness
-// Writes a 1kb file, 32 times to lose deterministic timing
-// XOR clock time into the key during 32 iterations
-void bounceGenKey(FILE *fp) {
-  // Buffer is large enough for each byte to index back into buffer
+// Generate 256 random bytes into outputFile
+// Starts with /dev/urandom
+// Mixes it more just in case
+void bounceGenKey(FILE *outputFile) {
+  // 256 byte buffer is the key and msg
   unsigned char random_bytes[256];
-  // Seed random generator with time in ms
-  struct timeval tv;
-  gettimeofday(&tv, NULL);
-  unsigned long long milliseconds =
-    (unsigned long long)tv.tv_sec * 1000 + (unsigned long long)tv.tv_usec / 1000;
-  srand((unsigned)milliseconds);
-  // Start with cstd random bytes, seeded with the time
-  for (int i = 0; i < 256; i++)
-    random_bytes[i] = rand();
-  // Spend some time.
-  for (int i = 0; i < 32; i++) {
-    bounceSpendTime();
-    // Xor the time into a different place in the key per iteration
-    ((long long *)random_bytes)[i % (256 / sizeof(long long))] ^= bounceTime();
+  unsigned char more_bytes[256];
+  for (int i = 0; i < 2; i++) {
+    FILE *randFile;
+    // Open /dev/urandom for reading
+    randFile = fopen("/dev/urandom", "rb");
+    if (randFile == NULL) {
+      perror("Error: Cannot open /dev/urandom");
+      exit(1);
+    }
+    // Read 256 bytes of random data into the random_bytes
+    if (fread(more_bytes, 1, sizeof(more_bytes), randFile) != sizeof(more_bytes)) {
+      perror("Error: Cannot read from /dev/urandom");
+      fclose(randFile);
+      exit(1);
+    }
+    fclose(randFile);
+    // XOR more_bytes into the key buffer
+    for (int i = 0; i < 256; i++)
+      random_bytes[i] ^= more_bytes[255 - i];
   }
-  // Finish with 4 bounce passes
-  for (unsigned int i = 0; i < 4; i++)
-    bounce_encrypt_pass(random_bytes, 256, random_bytes, random_bytes);
+  // XOR the time into the key
+  ((long long *)random_bytes)[0] ^= bounceTime();
+  // Finish with 2 bounce passes with more_bytes as key
+  bounce_encrypt_pass(random_bytes, 256, more_bytes, random_bytes);
+  bounce_encrypt_pass(random_bytes, 256, more_bytes, random_bytes);
   // Output
   for (int i = 0; i < 256; i++)
-    putc(random_bytes[i], fp);
+    putc(random_bytes[i], outputFile);
 }

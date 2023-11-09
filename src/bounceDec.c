@@ -12,17 +12,17 @@ unsigned char *bounce_decrypt(unsigned char *msg, unsigned int msgLen, unsigned 
   return output;
 }
 
-// Each write the output in reverse
+// Each pass writes the output in reverse
 unsigned char *bounce_decrypt_pass(unsigned char *msg, unsigned int msgLen, unsigned char *key,
                                    unsigned char *output) {
-  // Keep the original key
+  // Make a mutable key copy
   unsigned char mKey[256];
   for (int i = 0; i < 256; i++)
     mKey[i] = key[i];
 
   // Main decryption loop
   for (int i = msgLen - 2; i >= 0; i--) {
-    // Each iteration uses previous output byte as random byte index
+    // Each iteration uses previously computed output byte as random byte index
     output[i] = msg[i] ^ mKey[msg[i + 1]];
     // Key is mutated as we go
     mKey[msg[i + 1]] = (mKey[mKey[msg[i + 1]]] + i) % 256;
