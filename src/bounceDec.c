@@ -2,24 +2,36 @@
 
 #include "bounce.h"
 
+// It takes 2
 unsigned char *bounce_decrypt(unsigned char *msg, unsigned int msgLen, unsigned char *key,
                               unsigned char *output) {
+  unsigned char *buffer = malloc(msgLen);
+  bounce_decrypt_pass(msg, msgLen, key, buffer);
+  bounce_decrypt_pass(buffer, msgLen, key, output);
+  free(buffer);
+  return output;
+}
+
+// Each write the output in reverse
+unsigned char *bounce_decrypt_pass(unsigned char *msg, unsigned int msgLen, unsigned char *key,
+                                   unsigned char *output) {
   // Keep the original key
-  unsigned char origKey[256];
+  unsigned char mKey[256];
   for (int i = 0; i < 256; i++)
-    origKey[i] = key[i];
+    mKey[i] = key[i];
+
   // Main decryption loop
-  for (int i = 1; i < msgLen; i++) {
+  for (int i = msgLen - 2; i >= 0; i--) {
     // Each iteration uses previous output byte as random byte index
-    output[i] = msg[i] ^ key[msg[i - 1]];
+    output[i] = msg[i] ^ mKey[msg[i + 1]];
     // Key is mutated as we go
-    key[msg[i - 1]] = (key[key[msg[i - 1]]] + i) % 256;
+    mKey[msg[i + 1]] = (mKey[mKey[msg[i + 1]]] + i) % 256;
   }
-  // Sum the output (exclude first byte) and use sum as an index for the random byte
-  int sum = 0;
-  for (int i = 1; i < msgLen; i++)
+  // Sum the output (exclude last byte) and use sum as an index for the random byte
+  unsigned int sum = 0;
+  for (int i = 0; i <= msgLen - 2; i++)
     sum += output[i];
-  // Decrypt first byte with origKey
-  output[0] = msg[0] ^ origKey[sum % 256];
+  // Decrypt last byte with unchanged key
+  output[msgLen - 1] = msg[msgLen - 1] ^ key[sum % 256];
   return output;
 }

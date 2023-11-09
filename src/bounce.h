@@ -11,9 +11,13 @@
 
 #include "bounceReadFileResult.h"
 
-unsigned char       *bounce_encrypt(unsigned char *msg, unsigned int msgLen, unsigned char *key,
-                                    unsigned char *output);
-unsigned char       *bounce_decrypt(unsigned char *msg, unsigned int msgLen, unsigned char *key,
-                                    unsigned char *output);
+unsigned char *bounce_encrypt(unsigned char *msg, unsigned int msgLen, unsigned char *key,
+                              unsigned char *output);
+unsigned char *bounce_encrypt_pass(unsigned char *msg, unsigned int msgLen, unsigned char *key,
+                                   unsigned char *output);
+unsigned char *bounce_decrypt(unsigned char *msg, unsigned int msgLen, unsigned char *key,
+                              unsigned char *output);
+unsigned char *bounce_decrypt_pass(unsigned char *msg, unsigned int msgLen, unsigned char *key,
+                                   unsigned char *output);
 bounceReadFileResult bounceReadFile(const char *filePath);
 void                 bounceGenKey(FILE *fp);
