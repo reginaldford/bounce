@@ -6,9 +6,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <sys/time.h>
 #include <time.h>
 #include <unistd.h>
-
 #include "bounceReadFileResult.h"
 
 unsigned char *bounce_encrypt(unsigned char *msg, unsigned int msgLen, unsigned char *key,
