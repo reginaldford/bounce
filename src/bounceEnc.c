@@ -6,14 +6,14 @@
 unsigned char *bounce_encrypt(unsigned char *msg, unsigned int msgLen, unsigned char *key,
                               unsigned char *output) {
   unsigned char *buffer = malloc(msgLen);
-  bounce_encrypt_pass(msg, msgLen, key, buffer);
-  bounce_encrypt_pass(buffer, msgLen, key, output);
+  bounce_encrypt_pass_rl(msg, msgLen, key, buffer);
+  bounce_encrypt_pass_lr(buffer, msgLen, key, output);
   free(buffer);
   return output;
 }
 
-// Each pass writes the output in reverse
-unsigned char *bounce_encrypt_pass(unsigned char *msg, unsigned int msgLen, unsigned char *key,
+// Right to left encryption pass 
+unsigned char *bounce_encrypt_pass_rl(unsigned char *msg, unsigned int msgLen, unsigned char *key,
                                    unsigned char *output) {
   // Make a mutable key copy
   unsigned char mKey[256];
@@ -21,17 +21,39 @@ unsigned char *bounce_encrypt_pass(unsigned char *msg, unsigned int msgLen, unsi
     mKey[i] = key[i];
   // Sum the msg (exclude last byte) and use sum as an index for random byte
   unsigned int sum = 0;
-  for (int i = 0; i <= msgLen - 2; i++)
+  for (unsigned int i = 0; i <= msgLen - 2; i++)
     sum += msg[i];
   // Last output byte is input ^ (random byte)
   output[msgLen - 1] = msg[msgLen - 1] ^ key[sum % 256];
-
   // Main encryption loop
-  for (int i = msgLen - 2; i >= 0; i--) {
+  for (unsigned int i = msgLen - 2; i >= 0; i--) {
     // Each iteration uses previous output byte as random byte index
     output[i] = msg[i] ^ mKey[output[i + 1]];
     // Key is mutated as we go
-    mKey[output[i + 1]] = (mKey[mKey[output[i + 1]]] + i) % 256;
+    mKey[output[i + 1]] = (mKey[mKey[output[i + 1]]] )+ i % 256;
+  }
+  return output;
+}
+
+// Left to right pass 
+unsigned char *bounce_encrypt_pass_lr(unsigned char *msg, unsigned int msgLen, unsigned char *key,
+                                   unsigned char *output) {
+  // Make a mutable key copy
+  unsigned char mKey[256];
+  for (int i = 0; i < 256; i++)
+    mKey[i] = key[i];
+  // Sum the msg (exclude first byte) and use sum as an index for random byte
+  unsigned int sum = 0;
+  for (unsigned int i = 1; i <= msgLen - 1; i++)
+    sum += msg[i];
+  // First output byte is input ^ (random byte)
+  output[0] = msg[0] ^ key[sum % 256];
+  // Main encryption loop
+  for (unsigned int i = 1; i < msgLen; i++) {
+    // Each iteration uses previous output byte as random byte index
+    output[i] = msg[i] ^ mKey[output[i - 1]];
+    // Key is mutated as we go
+    mKey[output[i - 1]] = (mKey[mKey[output[i - 1]]] ) + i % 256;
   }
   return output;
 }
