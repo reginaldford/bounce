@@ -20,7 +20,7 @@ unsigned char *bounce_decrypt_pass_rl(unsigned char *msg, unsigned int msgLen, u
   for (int i = 0; i < 256; i++)
     mKey[i] = key[i];
   // Decrypt last byte with unchanged key
-  output[msgLen - 1] = msg[msgLen - 1] ^ key[0];
+  output[msgLen - 1] = msg[msgLen - 1] ^ key[255];
   // Main decryption loop
   for (unsigned int i = msgLen - 2; i + 1 >= 1; i--) {
     // Each iteration uses previously computed output byte as random byte index
