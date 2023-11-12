@@ -101,16 +101,35 @@ int main(int num_args, char **args) {
 
   //  Main processing
   unsigned char buffer[256];
+  unsigned char xBuffer[256];
   unsigned char output[256];
+  // Zero the xBuffer
+  for (int i = 0; i < 256; i++)
+    xBuffer[i] = 0;
   // Load data in the buffer
   size_t bytes_read = fread(buffer, 1, 256, inFile);
   if (bytes_read)
     do {
-      // Process the data in the buffer
-      if (decryptFlag)
-        bounce_decrypt(buffer, bytes_read, key, output);
-      else
+      // Encryption case
+      if (!decryptFlag) {
+        // CBC before encrypting
+        for (int i = 0; i < 256; i++)
+          buffer[i] ^= xBuffer[i];
+        // Encrypt
         bounce_encrypt(buffer, bytes_read, key, output);
+        // Save to xBuffer
+        for (int i = 0; i < 256; i++)
+          xBuffer[i] = output[i];
+      } else { // Decrption case
+        // Process data before CBC
+        bounce_decrypt(buffer, bytes_read, key, output);
+        // CBC
+        for (int i = 0; i < 256; i++)
+          output[i] ^= xBuffer[i];
+        // Save buffer to xBuffer
+        for (int i = 0; i < 256; i++)
+          xBuffer[i] = buffer[i];
+      }
       fwrite(output, 1, bytes_read, outFile);
       // Load more data in the buffer
       bytes_read = fread(buffer, 1, 256, inFile);

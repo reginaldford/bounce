@@ -35,11 +35,25 @@ To get started with Bounce, follow these simple steps:
    sudo make install
 
 ## Help , straight form the CLI
+
 ```shell
-    
+    Uses and examples:
+1. Generate a key:
+  bounce -g > myKey.k
+
+2. Encrypt a file:
+  bounce -k myKey.k -i msg.txt -o msg.txt.b
+
+3. Decrypt a file (note the -d):
+  bounce -k myKey.k -i msg.txt.b -o msg.txt -d
+
+You may also skip -o flag and pipe the output to a file.
+  bounce -k myKey.k -i msg.txt.b -d > clear.txt
+Bounce accepts data pipes for input and/or output:
+cat Makefile | ./bounce -k k | ./bounce -k k -d | cat
+
     
 
-Binary release soon!
 
 
 
