@@ -4,14 +4,14 @@ Bounce is an open-source encryption program designed around an extremely simple 
 
 ## Key Features
 
-- Powerful encryption: Guessing a 256 byte key is much harder than guessing a 256 bit key. It's 256 times
-  harder.
+- Powerful encryption: Guessing a 256 byte key is much harder than guessing a 256 bit key. 
 - FAST. The algorithm uses byte operations, which computers deal with better than bitwise operations.
 - Ease of use: Generate a 256-byte key and encrypt or decrypt files easily.
 - Efficient for messages as small as 1 byte, and works for arbitrarily large files.
 - Only requires ~1Kb memory. (not multithreaded, does 256 bytes at a time).
-- An understandable algorithm. Nothing unnecessary, just bouncing.
+- An understandable algorithm. Nothing unnecessary, just 'bouncing'.
 - Accepts data pipes for input and output.
+- Cypher Block Chaining is always on, making it impossible to detect block-size patterns in any encrypted message.
 
 ## Getting Started
 
@@ -51,9 +51,4 @@ You may also skip -o flag and pipe the output to a file.
   bounce -k myKey.k -i msg.txt.b -d > clear.txt
 Bounce accepts data pipes for input and/or output:
 cat Makefile | ./bounce -k k | ./bounce -k k -d | cat
-
-    
-
-
-
 
