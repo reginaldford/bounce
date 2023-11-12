@@ -1,6 +1,6 @@
 # Bounce Encryption Tool
 
-Bounce is an open-source encryption program designed around an extremely simple algorithm. Bounce is meant for academic research as well as a showcase of a reversable hash that will be used in the SMS programming language. It is a simple command line tool for POSIX environments. This program allows you to generate a 256-byte key and use it to encrypt or decrypt files. Bounce is released under the BSD 2-Clause License.
+Bounce is an open-source encryption program designed around an extremely simple algorithm. Bounce is meant for academic research as well as a showcase of a reversible hash that will be used in the SMS programming language. It is a simple command line tool for POSIX environments. This program allows you to generate a 256-byte key and use it to encrypt or decrypt files. Bounce is released under the BSD 2-Clause License. Binary executables are available in the releases section.
 
 ## Key Features
 
@@ -49,6 +49,8 @@ To get started with Bounce, follow these simple steps:
 
 You may also skip -o flag and pipe the output to a file.
   bounce -k myKey.k -i msg.txt.b -d > clear.txt
-Bounce accepts data pipes for input and/or output:
-cat Makefile | ./bounce -k k | ./bounce -k k -d | cat
+
+Bounce also accepts data pipes for input and/or output.
+In this example, we encrypt and decrypt "Secret message" in a single line:
+echo "Secret message" | ./bounce -k k | ./bounce -k k -d | cat
 
