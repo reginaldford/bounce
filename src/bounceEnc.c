@@ -10,19 +10,6 @@ unsigned char *bounce_encrypt(unsigned char *msg, unsigned int msgLen, unsigned 
   return output;
 }
 
-// Right to left encryption pass
-unsigned char *bounce_encrypt_pass_rl(unsigned char *msg, unsigned int msgLen, unsigned char *key,
-                                      unsigned char *output) {
-  // Last output byte is input ^ (random byte)
-  output[msgLen - 1] = msg[msgLen - 1] ^ key[255];
-  // Main encryption loop
-  for (unsigned int i = msgLen - 2; i + 1 >= 1; i--) {
-    // Each iteration uses previously computed output byte as random byte index
-    // Add i into the index to destroy bounce cycles
-    output[i] = msg[i] ^ ((key[output[i + 1]] + i) % 256);
-  }
-  return output;
-}
 
 // Left to right encryption pass
 unsigned char *bounce_encrypt_pass_lr(unsigned char *msg, unsigned int msgLen, unsigned char *key,
@@ -32,8 +19,17 @@ unsigned char *bounce_encrypt_pass_lr(unsigned char *msg, unsigned int msgLen, u
   // Main encryption loop
   for (unsigned int i = 1; i <= msgLen - 1; i++) {
     // Each iteration uses previously computed output byte as random byte index
-    // Add i into the index to destroy bounce cycles
     output[i] = msg[i] ^ ((key[output[i - 1]] + i) % 256);
+  }
+  return output;
+}
+
+// Right to left encryption pass
+unsigned char *bounce_encrypt_pass_rl(unsigned char *msg, unsigned int msgLen, unsigned char *key,
+                                      unsigned char *output) {
+  output[msgLen - 1] = msg[msgLen - 1] ^ key[255];
+  for (unsigned int i = msgLen - 2; i + 1 >= 1; i--) {
+    output[i] = msg[i] ^ ((key[output[i + 1]] + i) % 256);
   }
   return output;
 }

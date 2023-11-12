@@ -44,8 +44,6 @@ void bounceGenKey(FILE *outputFile) {
   ((long long *)random_bytes)[0] ^= bounceTime();
   // Left to right pass
   bounce_encrypt_pass_lr(random_bytes, 256, more_bytes, random_bytes);
-  // Change the key
-  bounce_encrypt_pass_lr(more_bytes, 256, more_bytes, more_bytes);
   // Right to left pass
   bounce_encrypt_pass_rl(random_bytes, 256, more_bytes, random_bytes);
   // Output

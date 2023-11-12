@@ -1,13 +1,17 @@
 # Bounce Encryption Tool
 
-Bounce is an open-source encryption program designed around an extremely simple algorithm. It's meant for academic research as well as a showcase of a reversable hash that will be used in the SMS programming language. It is a simple command line tool for POSIX environments. This project allows you to generate a 256-byte key and use it to encrypt or decrypt files. Bounce is released under the BSD 2-Clause License.
+Bounce is an open-source encryption program designed around an extremely simple algorithm. Bounce is meant for academic research as well as a showcase of a reversable hash that will be used in the SMS programming language. It is a simple command line tool for POSIX environments. This program allows you to generate a 256-byte key and use it to encrypt or decrypt files. Bounce is released under the BSD 2-Clause License.
 
 ## Key Features
 
-- Fairly OK encryption: Bounce uses bytewise XOR operations with a 256-byte key.
-- This is meant for speed. It's not reviewed by encryption scientists or anything.
+- Powerful encryption: Guessing a 256 byte key is much harder than guessing a 256 bit key. It's 256 times
+  harder.
+- FAST. The algorithm uses byte operations, which computers deal with better than bitwise operations.
 - Ease of use: Generate a 256-byte key and encrypt or decrypt files easily.
-- Designed for whole file encryption. Suitable for encrypting files that fit within your computer's free memory.
+- Efficient for messages as small as 1 byte, and works for arbitrarily large files.
+- Only requires ~1Kb memory. (not multithreaded, does 256 bytes at a time).
+- An understandable algorithm. Nothing unnecessary, just bouncing.
+- Accepts data pipes for input and output.
 
 ## Getting Started
 
@@ -26,12 +30,14 @@ To get started with Bounce, follow these simple steps:
    ```shell
    sudo make install
   
-4. Use bounce
+4. Compile bounce
    ```shell
    sudo make install
-   bounce -g > myKey.dat
-   bounce -k myKey.dat -i msg.txt -o msg.txt.b
 
+## Help , straight form the CLI
+```shell
+    
+    
 
 Binary release soon!
 

@@ -14,27 +14,30 @@ void bounceGiveHelp(char **args) {
   printf("  %s -k myKey.k -i msg.txt.b -o msg.txt -d\n\n", args[0]);
   printf("You may also skip -o flag and pipe the output to a file.\n");
   printf("  %s -k myKey.k -i msg.txt.b -d > clear.txt\n", args[0]);
+  printf("Bounce accepts data pipes for input and/or output:\n");
+  printf("cat Makefile | ./bounce -k k | ./bounce -k k -d | cat\n");
   fflush(stdout);
   exit(1);
 }
 
 int main(int num_args, char **args) {
   int   opt;
-  char *inFilePath      = NULL;   // i input file
-  char *keyFilePath     = NULL;   // k key
-  char *outFilePath     = NULL;   // o output file (stdout is default)
-  FILE *outFile         = stdout; // o output file (stdout is default)
-  bool  decryptFlag     = 0;      // d decrypt (enc is default)
-  bool  genKeyFlag      = 0;      // g generate key
-  bool  optionsWereUsed = 0;      // whether any options where used
-  while ((opt = getopt(num_args, args, "k:di:o:gh")) != -1) {
-    optionsWereUsed = 1;
+  char *inFilePath      = NULL;   // i Input file
+  char *keyFilePath     = NULL;   // k Key
+  char *outFilePath     = NULL;   // o Output file path (stdout is default)
+  FILE *inFile          = stdin;  // Input file ptr
+  FILE *outFile         = stdout; // Output file ptr
+  bool  decryptFlag     = false;  // D decrypt (enc is default)
+  bool  genKeyFlag      = false;  // G generate key
+  bool  optionsWereUsed = false;  // Whether any options where used
+  while ((opt = getopt(num_args, args, "k:di:o:ghf")) != -1) {
+    optionsWereUsed = true;
     switch (opt) {
     case 'k':
       keyFilePath = optarg;
       break;
     case 'd':
-      decryptFlag = 1;
+      decryptFlag = true;
       break;
     case 'i':
       inFilePath = optarg;
@@ -43,11 +46,11 @@ int main(int num_args, char **args) {
       outFilePath = optarg;
       break;
     case 'g':
-      genKeyFlag = 1;
+      genKeyFlag = true;
       break;
     case 'h':
       bounceGiveHelp(args);
-      return 1;
+      return true;
       break;
     }
   }
@@ -86,38 +89,39 @@ int main(int num_args, char **args) {
   }
   unsigned char *key = keyFileResult.fileContent;
 
-  // Read input file
-  if (inFilePath == 0) {
-    printf("No input file provided. Use -i\n");
-    exit(EXIT_FAILURE);
+  // If -i was used, open input file
+  if (inFilePath) {
+    inFile = fopen(inFilePath, "rb");
+    // Handle fopen error
+    if (inFile == NULL) {
+      perror("fopen");
+      return 1;
+    }
   }
-  bounceReadFileResult inFileResult = bounceReadFile(inFilePath);
-  if (inFileResult.fileExists == 0) {
-    printf("Could not read input file\n"); // should use stderr
-    exit(EXIT_FAILURE);
-  }
-  unsigned char *input = inFileResult.fileContent;
 
-  // Setup the output buffer
-  int            inputLen = inFileResult.fileSize;
-  unsigned char *output   = malloc(inputLen);
-
-  // Process the data
-  if (decryptFlag)
-    bounce_decrypt(input, inputLen, key, output);
+  //  Main processing
+  unsigned char buffer[256];
+  unsigned char output[256];
+  // Load data in the buffer
+  size_t bytes_read = fread(buffer, 1, 256, inFile);
+  if (bytes_read)
+    do {
+      // Process the data in the buffer
+      if (decryptFlag)
+        bounce_decrypt(buffer, bytes_read, key, output);
+      else
+        bounce_encrypt(buffer, bytes_read, key, output);
+      fwrite(output, 1, bytes_read, outFile);
+      // Load more data in the buffer
+      bytes_read = fread(buffer, 1, 256, inFile);
+    } while (bytes_read > 0);
   else
-    bounce_encrypt(input, inputLen, key, output);
-
-  // Writing data to file
-  for (int i = 0; i < inputLen; i++)
-    putc(output[i], outFile);
+    printf("Input file is empty?\n");
 
   // Close output file , if we opened one
-  if (outFilePath && fclose(outFile) != 0)
+  if (outFile != stdout && fclose(outFile) != 0)
     perror("fclose");
 
   // Clean up and return 0
-  free(input);
-  free(output);
   return 0;
 }
