@@ -99,8 +99,8 @@ int main(int num_args, char **args) {
     }
   }
 
-  //Processing
-  bounceProcess(inFile,outFile,key,decryptFlag);
+  // Processing
+  bounceProcess(inFile, outFile, key, decryptFlag);
 
   // Close output file , if we opened one
   if (outFile != stdout && fclose(outFile) != 0)

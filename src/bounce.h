@@ -26,4 +26,4 @@ unsigned char *bounce_decrypt_pass_rl(unsigned char *msg, unsigned int msgLen, u
 bounceReadFileResult bounceReadFile(const char *filePath);
 void                 bounceGenKey(FILE *fp);
 
-void bounceProcess(FILE *inFile,FILE *outfile, unsigned char * key, bool decryptFlag);
+void bounceProcess(FILE *inFile, FILE *outfile, unsigned char *key, bool decryptFlag);
