@@ -5,8 +5,9 @@
 // It takes 2
 unsigned char *bounce_encrypt(unsigned char *msg, unsigned int msgLen, unsigned char *key,
                               unsigned char *output) {
+  unsigned char *altKey = bounceGenAlt(key);
   bounce_encrypt_pass_rl(msg, msgLen, key, output);
-  bounce_encrypt_pass_lr(output, msgLen, key, output);
+  bounce_encrypt_pass_lr(output, msgLen, altKey, output);
   return output;
 }
 

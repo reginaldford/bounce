@@ -27,3 +27,5 @@ bounceReadFileResult bounceReadFile(const char *filePath);
 void                 bounceGenKey(FILE *fp);
 
 void bounceProcess(FILE *inFile, FILE *outfile, unsigned char *key, bool decryptFlag);
+
+unsigned char *bounceGenAlt(unsigned char *key);

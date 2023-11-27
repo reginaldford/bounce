@@ -3,13 +3,13 @@
 
 os=$(uname -s)
 
-if [ $os -eq "OpenBSD" ] ; then 
+if [ "$os" = "OpenBSD" ]; then
   make="gmake"
 else
   make="make"
 fi
 
-if [ "$#" -eq 1 ] ; then
+if [ "$#" = 1 ] ; then
   file="$1"
 else
   file="bounce"
@@ -24,7 +24,7 @@ echo "Key:"
 head k | xxd &&
 echo "Differences:"
 diff -a $file $file.2 | head
-if [ $? -eq 0 ] ; then
+if [ $? = 0 ] ; then
   rm $file2 $file.b k
 fi
 

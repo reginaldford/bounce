@@ -5,8 +5,9 @@
 // It takes 2
 unsigned char *bounce_decrypt(unsigned char *msg, unsigned int msgLen, unsigned char *key,
                               unsigned char *output) {
-  unsigned char buffer[256];
-  bounce_decrypt_pass_lr(msg, msgLen, key, buffer);
+  unsigned char  buffer[256];
+  unsigned char *altKey = bounceGenAlt(key);
+  bounce_decrypt_pass_lr(msg, msgLen, altKey, buffer);
   bounce_decrypt_pass_rl(buffer, msgLen, key, output);
   return output;
 }

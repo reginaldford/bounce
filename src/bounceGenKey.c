@@ -47,12 +47,12 @@ void bounceKeyQualify(unsigned char *key) {
   }
   // First and last byte of the key is checked
   if (bitcount(key[0]) < 2 || bitcount(key[0] > 6))
-    key[0] ^= goodRandomByte();
+    key[0] = goodRandomByte();
   if (bitcount(key[255]) < 2 || bitcount(key[255] > 6))
-    key[255] ^= goodRandomByte();
+    key[255] = goodRandomByte();
   // First and last byte must be different
   while (key[0] == key[255])
-    key[255] ^= goodRandomByte();
+    key[255] = goodRandomByte();
 }
 
 // Generate 256 random bytes into outputFile
