@@ -23,7 +23,7 @@ void bounce_roll_rl(unsigned char *msg, unsigned int msgLen, unsigned char *outp
     output[i] = (msg[i] ^ ((unsigned char *)&sum)[0]);
     for (int j = 1; j < sizeof(int); j++)
       output[i] ^= ((unsigned char *)&sum)[j];
-    sum = sum * sum - msg[i] * msg[i] - i;
+    sum = sum + SQ(SQ(msg[i])) + i;
   }
 }
 
@@ -34,7 +34,7 @@ void bounce_roll_lr(unsigned char *msg, unsigned int msgLen, unsigned char *outp
     output[i] = (msg[i] ^ ((unsigned char *)&sum)[0]);
     for (int j = 1; j < sizeof(int); j++)
       output[i] ^= ((unsigned char *)&sum)[j];
-    sum = sum * sum - msg[i] * msg[i] - i;
+    sum = sum + SQ(SQ(msg[i])) + i;
   }
 }
 
@@ -45,7 +45,7 @@ void bounce_unroll_rl(unsigned char *msg, unsigned int msgLen, unsigned char *ou
     output[i] = (msg[i] ^ ((unsigned char *)&sum)[0]);
     for (int j = 1; j < sizeof(int); j++)
       output[i] ^= ((unsigned char *)&sum)[j];
-    sum = sum * sum - output[i] * output[i] - i;
+    sum = sum + SQ(SQ(output[i])) + i;
   }
 }
 
@@ -56,6 +56,6 @@ void bounce_unroll_lr(unsigned char *msg, unsigned int msgLen, unsigned char *ou
     output[i] = (msg[i] ^ ((unsigned char *)&sum)[0]);
     for (int j = 1; j < sizeof(int); j++)
       output[i] ^= ((unsigned char *)&sum)[j];
-    sum = sum * sum - output[i] * output[i] - i;
+    sum = sum + SQ(SQ(output[i])) + i;
   }
 }

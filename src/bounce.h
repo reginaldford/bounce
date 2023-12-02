@@ -13,6 +13,8 @@
 // Structure for results of bounceReadFile function
 #include "bounceReadFileResult.h"
 
+#define SQ(x) (x * x)
+
 // bounceEnc.c
 unsigned char *bounce_encrypt(unsigned char *msg, unsigned int msgLen, unsigned char *key,
                               unsigned char keySum, unsigned char *output);
