@@ -2,34 +2,25 @@
 
 #include "bounce.h"
 
-// It takes 2
+// Decrypt pass after rolling both ways
 unsigned char *bounce_decrypt(unsigned char *msg, unsigned int msgLen, unsigned char *key,
                               unsigned char *output) {
-  unsigned char  buffer[256];
-  unsigned char *altKey = bounceGenAlt(key);
-  bounce_decrypt_pass_lr(msg, msgLen, altKey, buffer);
-  bounce_decrypt_pass_rl(buffer, msgLen, key, output);
-  return output;
-}
-
-// Right to left decryption pass
-unsigned char *bounce_decrypt_pass_rl(unsigned char *msg, unsigned int msgLen, unsigned char *key,
-                                      unsigned char *output) {
-  // Decrypt last byte with unchanged key
-  output[msgLen - 1] = msg[msgLen - 1] ^ key[255];
-  // Main decryption loop
-  for (unsigned int i = msgLen - 2; i + 1 >= 1; i--) {
-    // Each iteration uses previously computed output byte as random byte index
-    output[i] = msg[i] ^ ((key[msg[i + 1]] + i) % 256);
-  }
+  unsigned char buffer[msgLen];
+  unsigned char buffer2[msgLen];
+  bounce_decrypt_pass(msg, msgLen, key, buffer);
+  bounce_unroll_rl(buffer, msgLen, buffer2);
+  bounce_unroll_lr(buffer2, msgLen, output);
   return output;
 }
 
 // Left to right decryption pass
-unsigned char *bounce_decrypt_pass_lr(unsigned char *msg, unsigned int msgLen, unsigned char *key,
-                                      unsigned char *output) {
+unsigned char *bounce_decrypt_pass(unsigned char *msg, unsigned int msgLen, unsigned char *key,
+                                   unsigned char *output) {
+  // First otuput byte is input ^ (random byte)
   output[0] = msg[0] ^ key[0];
+  // Main decryption loop
   for (unsigned int i = 1; i <= msgLen - 1; i++) {
+    // Each iteration uses previously computed output byte as random byte index
     output[i] = msg[i] ^ ((key[msg[i - 1]] + i) % 256);
   }
   return output;

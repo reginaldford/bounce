@@ -3,7 +3,7 @@
 #include "bounce.h"
 
 void bounceGiveHelp(char **args) {
-  printf("Bounce v0.02\n");
+  printf("Bounce v0.03\n");
   printf("Copyright (c) 2023 Rex Ford\n\n");
   printf("Uses and examples:\n");
   printf("1. Generate a key:\n");
