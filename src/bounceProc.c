@@ -4,6 +4,8 @@
 // Applies CBC and Bounce Algorithm for an inFile
 // Outputs to outFile
 void bounceProcess(FILE *inFile, FILE *outFile, unsigned char *key, bool decryptFlag) {
+  // Calculate and store the keySum
+  unsigned char keySum = bounceProcKeySum(key);
   // Input buffer
   static unsigned char buffer[256];
   // XOR buffer (for CBC)
@@ -19,20 +21,22 @@ void bounceProcess(FILE *inFile, FILE *outFile, unsigned char *key, bool decrypt
       // Encryption case
       if (!decryptFlag) {
         // CBC before encrypting
-        for (short i = 0; i < 256 / SLL; i++)
+        for (short i = 0; i < bytes_read / SLL; i++)
           ((long long *)buffer)[i] ^= ((long long *)xBuffer)[i];
         // Encrypt
-        bounce_encrypt(buffer, bytes_read, key, output);
+        bounce_encrypt(buffer, bytes_read, key, keySum, output);
+        // Prep for next block if necessary
         // Save to xBuffer
-        memcpy(xBuffer, output, 256);
+        memcpy(xBuffer, output, bytes_read);
       } else { // Decryption case
         // Process data before CBC
-        bounce_decrypt(buffer, bytes_read, key, output);
+        bounce_decrypt(buffer, bytes_read, key, keySum, output);
+        // Prep for next block if necessary
         // CBC
-        for (short i = 0; i < 256 / SLL; i++)
+        for (short i = 0; i < bytes_read / SLL; i++)
           ((long long *)output)[i] ^= ((long long *)xBuffer)[i];
         // Save buffer to xBuffer
-        memcpy(xBuffer, buffer, 256);
+        memcpy(xBuffer, buffer, bytes_read);
       }
       fwrite(output, bytes_read, 1, outFile);
       // Load more data in the buffer
@@ -40,4 +44,12 @@ void bounceProcess(FILE *inFile, FILE *outFile, unsigned char *key, bool decrypt
     } while (bytes_read > 0);
   else
     printf("Input file is empty?\n");
+}
+
+// Helper function to get key sum for first byte
+unsigned char bounceProcKeySum(unsigned char *key) {
+  unsigned char sum = 0;
+  for (int i = 0; i < 256; i++)
+    sum += key[i];
+  return sum;
 }

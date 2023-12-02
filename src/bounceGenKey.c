@@ -78,7 +78,7 @@ void bounceGenKey(FILE *outputFile) {
   // XOR the time into the key
   ((long long *)buffer)[0] ^= bounceTime();
   // Spread time info into key via LR pass
-  bounce_encrypt_pass(buffer, 256, buffer, buffer);
+  bounce_encrypt(buffer, 256, buffer, bounceProcKeySum(buffer), buffer);
   // Ensure key quality
   bounceKeyQualify(buffer);
   // Output
