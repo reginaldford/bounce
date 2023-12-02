@@ -6,10 +6,8 @@
 unsigned char *bounce_decrypt(unsigned char *msg, unsigned int msgLen, unsigned char *key,
                               unsigned char *output) {
   unsigned char buffer[msgLen];
-  unsigned char buffer2[msgLen];
   bounce_decrypt_pass(msg, msgLen, key, buffer);
-  bounce_unroll_rl(buffer, msgLen, buffer2);
-  bounce_unroll_lr(buffer2, msgLen, output);
+  bounce_unroll(buffer, msgLen, output);
   return output;
 }
 

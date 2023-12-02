@@ -6,10 +6,8 @@
 unsigned char *bounce_encrypt(unsigned char *msg, unsigned int msgLen, unsigned char *key,
                               unsigned char *output) {
   unsigned char buffer[msgLen];
-  unsigned char buffer2[msgLen];
-  bounce_roll_lr(msg, msgLen, buffer);
-  bounce_roll_rl(buffer, msgLen, buffer2);
-  bounce_encrypt_pass(buffer2, msgLen, key, output);
+  bounce_roll(msg, msgLen, buffer);
+  bounce_encrypt_pass(buffer, msgLen, key, output);
   return output;
 }
 

@@ -26,8 +26,9 @@ void bounceProcess(FILE *inFile, FILE *outfile, unsigned char *key, bool decrypt
 
 unsigned char *bounceGenAlt(unsigned char *key);
 
-
+void bounce_roll(unsigned char *msg, unsigned int msgLen, unsigned char *output);
 void bounce_roll_lr(unsigned char *msg, unsigned int msgLen, unsigned char *output);
 void bounce_roll_rl(unsigned char *msg, unsigned int msgLen, unsigned char *output);
+void bounce_unroll(unsigned char *msg, unsigned int msgLen, unsigned char *output);
 void bounce_unroll_lr(unsigned char *msg, unsigned int msgLen, unsigned char *output);
 void bounce_unroll_rl(unsigned char *msg, unsigned int msgLen, unsigned char *output);
