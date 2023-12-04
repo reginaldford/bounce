@@ -25,14 +25,12 @@ void bounceProcess(FILE *inFile, FILE *outFile, unsigned char *key, bool decrypt
           ((long long *)buffer)[i] ^= ((long long *)xBuffer)[i];
         // Encrypt
         bounce_encrypt(buffer, bytes_read, key, keySum, output);
-        // Prep for next block if necessary
         // Save to xBuffer
         memcpy(xBuffer, output, bytes_read);
       } else { // Decryption case
-        // Process data before CBC
+        // Process data before unCBC
         bounce_decrypt(buffer, bytes_read, key, keySum, output);
-        // Prep for next block if necessary
-        // CBC
+        // unCBC
         for (short i = 0; i < bytes_read / SLL; i++)
           ((long long *)output)[i] ^= ((long long *)xBuffer)[i];
         // Save buffer to xBuffer

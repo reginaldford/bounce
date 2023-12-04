@@ -3,7 +3,7 @@
 #include "bounce.h"
 
 void bounceGiveHelp(char **args) {
-  printf("Bounce v0.03\n");
+  printf("Bounce v0.04\n");
   printf("Copyright (c) 2023 Rex Ford\n\n");
   printf("Uses and examples:\n");
   printf("1. Generate a key:\n");
@@ -12,10 +12,9 @@ void bounceGiveHelp(char **args) {
   printf("  %s -k myKey.k -i msg.txt -o msg.txt.b\n\n", args[0]);
   printf("3. Decrypt a file (note the -d):\n");
   printf("  %s -k myKey.k -i msg.txt.b -o msg.txt -d\n\n", args[0]);
-  printf("You may also skip -o flag and pipe the output to a file.\n");
-  printf("  %s -k myKey.k -i msg.txt.b -d > clear.txt\n", args[0]);
-  printf("Bounce accepts data pipes for input and/or output:\n");
-  printf("echo \"secret\" | bounce -k k | bounce -k k -d | cat\n");
+  printf("Bounce accepts data pipes for input and/or output.\n");
+  printf("Omitting -i and/or -o uses a pipe instead of a file:\n");
+  printf("echo \"secret\" | bounce -k k | bounce -k k -d\n");
   fflush(stdout);
   exit(1);
 }

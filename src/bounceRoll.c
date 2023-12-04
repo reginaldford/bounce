@@ -2,7 +2,7 @@
 
 #include "bounce.h"
 
-// Rolling spreads dependency of everything to everything
+// Rolling spreads dependency of everything byte to every other byte
 void bounce_roll(unsigned char *msg, unsigned int msgLen, unsigned char *output) {
   unsigned char buffer[msgLen];
   bounce_roll_lr(msg, msgLen, buffer);

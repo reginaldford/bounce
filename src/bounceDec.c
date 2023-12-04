@@ -2,7 +2,7 @@
 
 #include "bounce.h"
 
-// Decrypt pass before unrolling
+// Decrypt pass, then unroll
 unsigned char *bounce_decrypt(unsigned char *msg, unsigned int msgLen, unsigned char *key,
                               unsigned char keySum, unsigned char *output) {
   unsigned char buffer[msgLen];
@@ -11,7 +11,7 @@ unsigned char *bounce_decrypt(unsigned char *msg, unsigned int msgLen, unsigned 
   return output;
 }
 
-// Left to right decryption pass
+// Decryption pass
 unsigned char *bounce_decrypt_pass(unsigned char *msg, unsigned int msgLen, unsigned char *key,
                                    unsigned char keySum, unsigned char *output) {
   // First output byte is input ^ (random byte)

@@ -2,7 +2,7 @@
 
 #include "bounce.h"
 
-// Encrypt pass after rolling
+// Roll, then encrypt pass
 unsigned char *bounce_encrypt(unsigned char *msg, unsigned int msgLen, unsigned char *key,
                               unsigned char keySum, unsigned char *output) {
   unsigned char buffer[msgLen];
@@ -11,7 +11,7 @@ unsigned char *bounce_encrypt(unsigned char *msg, unsigned int msgLen, unsigned 
   return output;
 }
 
-// Left to right encryption pass
+// Encryption pass
 unsigned char *bounce_encrypt_pass(unsigned char *msg, unsigned int msgLen, unsigned char *key,
                                    unsigned char keySum, unsigned char *output) {
   // First output byte is input ^ (random byte)
