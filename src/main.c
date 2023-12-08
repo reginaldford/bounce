@@ -15,7 +15,7 @@ void bounceGiveHelp(char **args) {
   printf("You may also skip -o flag and pipe the output to a file.\n");
   printf("  %s -k myKey.k -i msg.txt.b -d > clear.txt\n", args[0]);
   printf("Bounce accepts data pipes for input and/or output:\n");
-  printf("echo \"secret\" | bounce -k k | bounce -k k -d | cat\n");
+  printf("echo \"secret\" | bounce -k k | bounce -k k -d\n");
   fflush(stdout);
   exit(1);
 }
