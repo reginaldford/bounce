@@ -19,9 +19,9 @@ void bounce_unroll(unsigned char *msg, unsigned int msgLen, unsigned char *outpu
 // Roll the information from right to left
 void bounce_roll_rl(unsigned char *msg, unsigned int msgLen, unsigned char *output) {
   unsigned int sum = 0;
-  for (int i = msgLen - 1; i >= 0; i--) {
+  for (unsigned int i = msgLen - 1; i + 1 != 0; i--) {
     output[i] = (msg[i] ^ ((unsigned char *)&sum)[0]);
-    for (int j = 1; j < sizeof(int); j++)
+    for (unsigned int j = 1; j < sizeof(int); j++)
       output[i] ^= ((unsigned char *)&sum)[j];
     sum = sum + SQ(SQ(msg[i])) + i;
   }
@@ -30,9 +30,9 @@ void bounce_roll_rl(unsigned char *msg, unsigned int msgLen, unsigned char *outp
 // Roll the information from left to right
 void bounce_roll_lr(unsigned char *msg, unsigned int msgLen, unsigned char *output) {
   unsigned int sum = 0;
-  for (int i = 0; i < msgLen; i++) {
+  for (unsigned int i = 0; i < msgLen; i++) {
     output[i] = (msg[i] ^ ((unsigned char *)&sum)[0]);
-    for (int j = 1; j < sizeof(int); j++)
+    for (unsigned int j = 1; j < sizeof(int); j++)
       output[i] ^= ((unsigned char *)&sum)[j];
     sum = sum + SQ(SQ(msg[i])) + i;
   }
@@ -41,9 +41,9 @@ void bounce_roll_lr(unsigned char *msg, unsigned int msgLen, unsigned char *outp
 // Unroll the information from right to left
 void bounce_unroll_rl(unsigned char *msg, unsigned int msgLen, unsigned char *output) {
   unsigned int sum = 0;
-  for (int i = msgLen - 1; i >= 0; i--) {
+  for (unsigned int i = msgLen - 1; i + 1 != 0; i--) {
     output[i] = (msg[i] ^ ((unsigned char *)&sum)[0]);
-    for (int j = 1; j < sizeof(int); j++)
+    for (unsigned int j = 1; j < sizeof(int); j++)
       output[i] ^= ((unsigned char *)&sum)[j];
     sum = sum + SQ(SQ(output[i])) + i;
   }
@@ -52,9 +52,9 @@ void bounce_unroll_rl(unsigned char *msg, unsigned int msgLen, unsigned char *ou
 // Unroll the information from left to right
 void bounce_unroll_lr(unsigned char *msg, unsigned int msgLen, unsigned char *output) {
   unsigned int sum = 0;
-  for (int i = 0; i < msgLen; i++) {
+  for (unsigned int i = 0; i < msgLen; i++) {
     output[i] = (msg[i] ^ ((unsigned char *)&sum)[0]);
-    for (int j = 1; j < sizeof(int); j++)
+    for (unsigned int j = 1; j < sizeof(int); j++)
       output[i] ^= ((unsigned char *)&sum)[j];
     sum = sum + SQ(SQ(output[i])) + i;
   }

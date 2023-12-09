@@ -17,7 +17,7 @@ unsigned char *bounce_encrypt_pass(unsigned char *msg, unsigned int msgLen, unsi
   // First output byte is input ^ (random byte)
   output[0] = msg[0] ^ key[keySum];
   // Main encryption loop
-  for (unsigned int i = 1; i <= msgLen - 1; i++) {
+  for (unsigned int i = 1; i + 1 <= msgLen; i++) {
     // Each iteration uses previously computed output byte as random byte index
     output[i] = msg[i] ^ (key[output[i - 1]] + i);
   }

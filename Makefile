@@ -1,10 +1,10 @@
 CC = cc
 
 # For optimized output
-#CFLAGS = -Wall -Wextra -O3
-
+CFLAGS = -Wall -Wextra -O3
 # For debugging
-CFLAGS = -O3
+#CFLAGS = -g
+
 LDFLAGS =
 
 SRC_DIR = src

@@ -9,8 +9,10 @@ unsigned long long bounceTime() {
   if (clock_gettime(CLOCK_REALTIME, &current_time) == 0) {
     // Calculate the time in milliseconds
     milliseconds = current_time.tv_sec * 1000LL + current_time.tv_nsec / 1000000LL;
-  } else
+  } else {
     perror("clock_gettime");
+    exit(1);
+  }
   return milliseconds;
 }
 

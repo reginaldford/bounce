@@ -21,7 +21,7 @@ void bounceProcess(FILE *inFile, FILE *outFile, unsigned char *key, bool decrypt
       // Encryption case
       if (!decryptFlag) {
         // CBC before encrypting
-        for (short i = 0; i < bytes_read / SLL; i++)
+        for (unsigned short i = 0; i < bytes_read / SLL; i++)
           ((long long *)buffer)[i] ^= ((long long *)xBuffer)[i];
         // Encrypt
         bounce_encrypt(buffer, bytes_read, key, keySum, output);
@@ -31,7 +31,7 @@ void bounceProcess(FILE *inFile, FILE *outFile, unsigned char *key, bool decrypt
         // Process data before unCBC
         bounce_decrypt(buffer, bytes_read, key, keySum, output);
         // unCBC
-        for (short i = 0; i < bytes_read / SLL; i++)
+        for (unsigned short i = 0; i < bytes_read / SLL; i++)
           ((long long *)output)[i] ^= ((long long *)xBuffer)[i];
         // Save buffer to xBuffer
         memcpy(xBuffer, buffer, bytes_read);
@@ -49,31 +49,31 @@ void bounceREPL(unsigned char *key, int decryptFlag) {
   unsigned char input[500];
   unsigned char output[500];
   unsigned char keySum = bounceProcKeySum(key);
-  while (fgets(input, 500, stdin)) {
+  while (fgets((char *)input, 500, stdin)) {
     if (input[0] == 0)
       continue;
     // Read user input
     // Removing the newline from terminal input
-    int len    = strlen(input) - 1;
-    input[len] = 0;
+    unsigned int len = strlen((char *)input) - 1;
+    input[len]       = 0;
     // Decryption turns hex into their byte which is expect to be ascii
     if (decryptFlag) {
       unsigned char tmp[500];
-      for (int i = 0; i < len; i++) {
-        sscanf(&input[2 * i], "%2hhx", &tmp[i]);
+      for (unsigned int i = 0; i < len; i++) {
+        sscanf((char *)&input[2 * i], "%2hhx", &tmp[i]);
       }
-      for (int i = 0; i < len / 2; i++)
+      for (unsigned int i = 0; i < len / 2; i++)
         input[i] = tmp[i];
       bounce_decrypt(input, len / 2, key, keySum, output);
     } else
       bounce_encrypt(input, len, key, keySum, output);
     // Print the output bytes as ascii
     if (decryptFlag)
-      for (int i = 0; i < len / 2; i++)
+      for (unsigned int i = 0; i < len / 2; i++)
         printf("%c", output[i]);
     else
       // Print the bytes as 2 ascii chars each, using hex
-      for (int i = 0; i < len; i++)
+      for (unsigned int i = 0; i < len; i++)
         printf("%.2x", output[i]);
     printf("\n");
   }
