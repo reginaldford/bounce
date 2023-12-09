@@ -14,7 +14,7 @@ void bounceGiveHelp(char **args) {
     clear  = "\033[0m";
   }
 
-  printf("Bounce v0.04\n");
+  printf("Bounce v0.05\n");
   printf("Copyright (c) 2023 Rex Ford\n\n");
   printf("Uses and examples:\n");
   printf("1. Generate a key:\n");
@@ -38,7 +38,7 @@ void bounceGiveHelp(char **args) {
   printf("%s", yellow);
   printf("  %s -k myKey -r\n", args[0]);
   printf("%s", clear);
-  printf("Using -d will create a decrypting REPL\n");
+  printf("Adding -d to above command will create a decrypting REPL.\n");
   fflush(stdout);
   exit(1);
 }
