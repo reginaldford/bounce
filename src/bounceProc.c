@@ -46,10 +46,11 @@ void bounceProcess(FILE *inFile, FILE *outFile, unsigned char *key, bool decrypt
 
 // Read, Evaluate, Print loop mode
 void bounceREPL(unsigned char *key, int decryptFlag) {
-  unsigned char input[500];
-  unsigned char output[500];
+  unsigned char input[501];
+  unsigned char output[501];
   unsigned char keySum = bounceProcKeySum(key);
-  while (fgets((char *)input, 500, stdin)) {
+  while (fgets((char *)input, 501, stdin)) {
+    // Ignore blank messages
     if (input[0] == 0)
       continue;
     // Read user input

@@ -8,8 +8,8 @@ void bounceGiveHelp(char **args) {
   const char *term      = getenv("TERM");
   const char *colorterm = getenv("COLORTERM");
 
-  if (term != NULL &&
-      (colorterm != NULL || strstr(term, "color") != NULL || strstr(term, "256color") != NULL)) {
+  // Detect if we should use color
+  if (term != NULL && (colorterm != NULL || strstr(term, "color") != NULL)) {
     yellow = "\033[33m";
     clear  = "\033[0m";
   }
@@ -130,7 +130,9 @@ int main(int num_args, char **args) {
   if (replFlag) {
     printf("REPL mode. ");
     if (decryptFlag)
-      printf("Decrypting. ");
+      printf(" (Decrypting) ");
+    else
+      printf(" (Encrypting) ");
     printf("Max message size is 500 characters. Ctrl+C to end.\n\n");
     bounceREPL(key, decryptFlag);
   } else { // Regular processing
