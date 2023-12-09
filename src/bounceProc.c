@@ -57,25 +57,22 @@ void bounceREPL(unsigned char *key, int decryptFlag) {
     // Removing the newline from terminal input
     unsigned int len = strlen((char *)input) - 1;
     input[len]       = 0;
-    // Decryption turns hex into their byte which is expect to be ascii
+    // Decryption turns hex into their byte which is expected to be ascii
     if (decryptFlag) {
       unsigned char tmp[500];
-      for (unsigned int i = 0; i < len; i++) {
+      for (unsigned int i = 0; i < len; i++)
         sscanf((char *)&input[2 * i], "%2hhx", &tmp[i]);
-      }
       for (unsigned int i = 0; i < len / 2; i++)
         input[i] = tmp[i];
       bounce_decrypt(input, len / 2, key, keySum, output);
-    } else
-      bounce_encrypt(input, len, key, keySum, output);
-    // Print the output bytes as ascii
-    if (decryptFlag)
       for (unsigned int i = 0; i < len / 2; i++)
         printf("%c", output[i]);
-    else
+    } else { // Encrypting
+      bounce_encrypt(input, len, key, keySum, output);
       // Print the bytes as 2 ascii chars each, using hex
       for (unsigned int i = 0; i < len; i++)
         printf("%.2x", output[i]);
+    }
     printf("\n");
   }
 }
