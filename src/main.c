@@ -7,14 +7,17 @@ void bounceGiveHelp(char **args) {
   printf("Copyright (c) 2023 Rex Ford\n\n");
   printf("Uses and examples:\n");
   printf("1. Generate a key:\n");
-  printf("  %s -g > myKey.k\n\n", args[0]);
-  printf("2. Encrypt a file:\n");
-  printf("  %s -k myKey.k -i msg.txt -o msg.txt.b\n\n", args[0]);
-  printf("3. Decrypt a file (note the -d):\n");
-  printf("  %s -k myKey.k -i msg.txt.b -o msg.txt -d\n\n", args[0]);
+  printf("  %s -g > myKey\n\n", args[0]);
+  printf("\n2. Encrypt a file:\n");
+  printf("  %s -k myKey -i msg.txt -o msg.txt.b\n\n", args[0]);
+  printf("\n3. Decrypt a file (note the -d):\n");
+  printf("  %s -k myKey -i msg.txt.b -o msg.txt -d\n\n", args[0]);
   printf("Bounce accepts data pipes for input and/or output.\n");
   printf("Omitting -i and/or -o uses a pipe instead of a file:\n");
-  printf("echo \"secret\" | bounce -k k | bounce -k k -d\n");
+  printf("  echo \"secret\" | bounce -k k | bounce -k k -d\n");
+  printf("\n4. REPL allows conversion to and from clear text and encrypted hex.\n");
+  printf("  %s -k myKey -r\n");
+  printf("Using -d will create a decrypting REPL\n");
   fflush(stdout);
   exit(1);
 }
