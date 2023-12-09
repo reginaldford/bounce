@@ -12,11 +12,12 @@ Bounce is an open-source encryption program designed around a simple algorithm. 
 - An understandable algorithm. Nothing unnecessary, just 'bouncing'.
 - Accepts data pipes for input and output.
 - Cypher Block Chaining is always on, making it impossible to detect block-size patterns in any encrypted message.
-- REPL mode allows immediate encrption and decryption to a format safe for copy and paste.
+- REPL mode allows chat-style encryption and decryption between formats for copy and paste.
   
 ## Explanation of the algorithm
-- First, the program does a "roll" operation on the message (or 256 bytes of the message), which does not depend on the key, and can easily be undone by anyone who has the unroll function, but this spreads the dependancy of all bytes to all bytes, accomplishing the necessary diffusion for good encryption. This is done in 2 parts, spreading the dependancy from left to right, then from right to left. This algorithm relies on a state machine that has 2^32 states. Since there is a roll from left to right and from right to left, there is less than 1/2^64 chance of state maching coincidentally. A matching state case for two different inputs is also impossible without having the state being wrong for more than 1 byte. Then, there's a second round of rolling, where the differing bytes cause the rest of the message to be completely different.
-- Next, the bouncing pass is applied from left to right. The first byte of the message is XOR'd with a byte that is the sum of the key's bytes, as a byte. Then, every byte after the first is XOR'd with the byte from the key with the index equal to the previous byte, interpetted as an integer, with the byte index added to the value.
+- View [bounceProc.c](src/bounceProc.c) to see the entire encryption / decryption processes from the top.
+- View [bounceRoll.c](src/bounceRoll.c) to see the rolling procedure.
+- View [bounceEnc.c](src/bounceEnc.c) and [bounceDec.c](src/bounceEnc.c) for the bounce encryption/decryption procedures.
 
 ## Getting Started
 
@@ -24,20 +25,15 @@ To get started with Bounce, follow these simple steps:
 
 1. Clone the repository to your local machine:
    ```shell
-   git clone https://github.com/ReginaldFord/bounce.git
-  
+   git clone https://github.com/ReginaldFord/bounce
 2. Compile the code. You might need to edit the Makefile for your compiler
    ```shell
    cd bounce
    make
-  
 3. Consider installing
    ```shell
    sudo make install
   
-4. Compile bounce
-   ```shell
-   sudo make install
 
 ## Help , straight form the CLI
 
@@ -58,4 +54,4 @@ Omitting -i and/or -o uses a pipe instead of a file:
 
 4. REPL allows conversion to and from clear text and encrypted hex.
   bounce -k myKey -r
-Using -d will create a decrypting REPL
+Adding -d to above command will create a decrypting REPL.
