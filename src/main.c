@@ -3,20 +3,41 @@
 #include "bounce.h"
 
 void bounceGiveHelp(char **args) {
+  char       *yellow    = "";
+  char       *clear     = "";
+  const char *term      = getenv("TERM");
+  const char *colorterm = getenv("COLORTERM");
+
+  if (term != NULL &&
+      (colorterm != NULL || strstr(term, "color") != NULL || strstr(term, "256color") != NULL)) {
+    yellow = "\033[33m";
+    clear  = "\033[0m";
+  }
+
   printf("Bounce v0.04\n");
   printf("Copyright (c) 2023 Rex Ford\n\n");
   printf("Uses and examples:\n");
   printf("1. Generate a key:\n");
+  printf("%s", yellow);
   printf("  %s -g > myKey\n\n", args[0]);
+  printf("%s", clear);
   printf("\n2. Encrypt a file:\n");
+  printf("%s", yellow);
   printf("  %s -k myKey -i msg.txt -o msg.txt.b\n\n", args[0]);
+  printf("%s", clear);
   printf("\n3. Decrypt a file (note the -d):\n");
+  printf("%s", yellow);
   printf("  %s -k myKey -i msg.txt.b -o msg.txt -d\n\n", args[0]);
-  printf("Bounce accepts data pipes for input and/or output.\n");
+  printf("%s", clear);
+  printf("Note: Bounce accepts data pipes for input and/or output.\n");
   printf("Omitting -i and/or -o uses a pipe instead of a file:\n");
+  printf("%s", yellow);
   printf("  echo \"secret\" | bounce -k k | bounce -k k -d\n");
+  printf("%s", clear);
   printf("\n4. REPL allows conversion to and from clear text and encrypted hex.\n");
-  printf("  %s -k myKey -r\n");
+  printf("%s", yellow);
+  printf("  %s -k myKey -r\n", args[0]);
+  printf("%s", clear);
   printf("Using -d will create a decrypting REPL\n");
   fflush(stdout);
   exit(1);
