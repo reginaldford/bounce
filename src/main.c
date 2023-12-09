@@ -28,8 +28,9 @@ int main(int num_args, char **args) {
   FILE *outFile         = stdout; // Output file ptr
   bool  decryptFlag     = false;  // D decrypt (enc is default)
   bool  genKeyFlag      = false;  // G generate key
+  bool  replFlag        = false;  // REPL mode flag
   bool  optionsWereUsed = false;  // Whether any options where used
-  while ((opt = getopt(num_args, args, "k:di:o:ghf")) != -1) {
+  while ((opt = getopt(num_args, args, "k:di:o:ghfr")) != -1) {
     optionsWereUsed = true;
     switch (opt) {
     case 'k':
@@ -50,6 +51,9 @@ int main(int num_args, char **args) {
     case 'h':
       bounceGiveHelp(args);
       return true;
+      break;
+    case 'r':
+      replFlag = true;
       break;
     }
   }
@@ -98,8 +102,16 @@ int main(int num_args, char **args) {
     }
   }
 
-  // Processing
-  bounceProcess(inFile, outFile, key, decryptFlag);
+  // REPL Mode
+  if (replFlag) {
+    printf("REPL mode. ");
+    if (decryptFlag)
+      printf("Decrypting. ");
+    printf("Max message size is 500 characters. Ctrl+C to end.\n\n");
+    bounceREPL(key, decryptFlag);
+  } else { // Regular processing
+    bounceProcess(inFile, outFile, key, decryptFlag);
+  }
 
   // Close output file , if we opened one
   if (outFile != stdout && fclose(outFile) != 0)
