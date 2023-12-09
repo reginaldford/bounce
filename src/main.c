@@ -21,11 +21,11 @@ void bounceGiveHelp(char **args) {
   printf("%s", yellow);
   printf("  %s -g > myKey\n\n", args[0]);
   printf("%s", clear);
-  printf("\n2. Encrypt a file:\n");
+  printf("2. Encrypt a file:\n");
   printf("%s", yellow);
   printf("  %s -k myKey -i msg.txt -o msg.txt.b\n\n", args[0]);
   printf("%s", clear);
-  printf("\n3. Decrypt a file (note the -d):\n");
+  printf("3. Decrypt a file (note the -d):\n");
   printf("%s", yellow);
   printf("  %s -k myKey -i msg.txt.b -o msg.txt -d\n\n", args[0]);
   printf("%s", clear);
@@ -34,7 +34,7 @@ void bounceGiveHelp(char **args) {
   printf("%s", yellow);
   printf("  echo \"secret\" | bounce -k k | bounce -k k -d\n");
   printf("%s", clear);
-  printf("\n4. REPL allows conversion to and from clear text and encrypted hex.\n");
+  printf("4. REPL allows conversion to and from clear text and encrypted hex.\n");
   printf("%s", yellow);
   printf("  %s -k myKey -r\n", args[0]);
   printf("%s", clear);

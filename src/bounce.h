@@ -34,7 +34,7 @@ void bounceGenKey(FILE *fp);
 // bounceProc.c
 void          bounceProcess(FILE *inFile, FILE *outfile, unsigned char *key, bool decryptFlag);
 unsigned char bounceProcKeySum(unsigned char *key);
-void bounceREPL(unsigned char* key,int decryptFlag);
+void          bounceREPL(unsigned char *key, int decryptFlag);
 // bounceRoll.c
 void bounce_roll(unsigned char *msg, unsigned int msgLen, unsigned char *output);
 void bounce_roll_lr(unsigned char *msg, unsigned int msgLen, unsigned char *output);
