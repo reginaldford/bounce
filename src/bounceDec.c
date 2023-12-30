@@ -4,18 +4,19 @@
 
 // Decrypt pass, then unroll
 unsigned char *bounce_decrypt(unsigned char *msg, unsigned int msgLen, unsigned char *key,
-                              unsigned char keySum, unsigned char *output) {
+                              unsigned int keySum, unsigned char *output) {
   unsigned char buffer[msgLen];
-  bounce_decrypt_pass(msg, msgLen, key, keySum, buffer);
-  bounce_unroll(buffer, msgLen, output);
+  bounce_decrypt_pass(msg, msgLen, key, buffer);
+  bounce_unroll(buffer, msgLen, output, keySum);
   return output;
 }
 
 // Decryption pass
 unsigned char *bounce_decrypt_pass(unsigned char *msg, unsigned int msgLen, unsigned char *key,
-                                   unsigned char keySum, unsigned char *output) {
+                                   unsigned char *output) {
   // First output byte is input ^ (random byte)
-  output[0] = msg[0] ^ key[keySum];
+  output[0] = msg[0] ^ key[0];
+  output[0] ^= key[255];
   // Main decryption loop
   for (unsigned int i = 1; i <= msgLen - 1; i++) {
     // Each iteration uses previously computed output byte as random byte index

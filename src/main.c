@@ -4,6 +4,8 @@
 
 void bounceGiveHelp(char **args) {
   char       *yellow    = "";
+  char       *green     = "";
+  char       *blue      = "";
   char       *clear     = "";
   const char *term      = getenv("TERM");
   const char *colorterm = getenv("COLORTERM");
@@ -11,11 +13,17 @@ void bounceGiveHelp(char **args) {
   // Detect if we should use color
   if (term != NULL && (colorterm != NULL || strstr(term, "color") != NULL)) {
     yellow = "\033[33m";
+    green  = "\033[32m";
+    blue   = "\033[34m";
     clear  = "\033[0m";
   }
 
-  printf("Bounce v0.05\n");
-  printf("Copyright (c) 2023 Rex Ford\n\n");
+  printf("%s", green);
+  printf("Bounce v0.051\n");
+  printf("%s", blue);
+  printf("Copyright (c) 2023 Rex Ford\n");
+  printf("%s", clear);
+  printf("Source code and BSD license is at github.com/reginaldford/bounce\n\n");
   printf("Uses and examples:\n");
   printf("1. Generate a key:\n");
   printf("%s", yellow);

@@ -17,14 +17,14 @@
 
 // bounceEnc.c
 unsigned char *bounce_encrypt(unsigned char *msg, unsigned int msgLen, unsigned char *key,
-                              unsigned char keySum, unsigned char *output);
+                              unsigned int keySum, unsigned char *output);
 unsigned char *bounce_encrypt_pass(unsigned char *msg, unsigned int msgLen, unsigned char *key,
-                                   unsigned char keySum, unsigned char *output);
+                                   unsigned char *output);
 // bounceDec.c
 unsigned char *bounce_decrypt(unsigned char *msg, unsigned int msgLen, unsigned char *key,
-                              unsigned char keySum, unsigned char *output);
+                              unsigned int keySum, unsigned char *output);
 unsigned char *bounce_decrypt_pass(unsigned char *msg, unsigned int msgLen, unsigned char *key,
-                                   unsigned char keySum, unsigned char *output);
+                                   unsigned char *output);
 // bounceReadFile.c
 bounceReadFileResult bounceReadFile(const char *filePath);
 
@@ -32,13 +32,19 @@ bounceReadFileResult bounceReadFile(const char *filePath);
 void bounceGenKey(FILE *fp);
 
 // bounceProc.c
-void          bounceProcess(FILE *inFile, FILE *outfile, unsigned char *key, bool decryptFlag);
-unsigned char bounceProcKeySum(unsigned char *key);
-void          bounceREPL(unsigned char *key, int decryptFlag);
+void         bounceProcess(FILE *inFile, FILE *outfile, unsigned char *key, bool decryptFlag);
+unsigned int bounceProcKeySum(unsigned char *key);
+void         bounceREPL(unsigned char *key, int decryptFlag);
 // bounceRoll.c
-void bounce_roll(unsigned char *msg, unsigned int msgLen, unsigned char *output);
-void bounce_roll_lr(unsigned char *msg, unsigned int msgLen, unsigned char *output);
-void bounce_roll_rl(unsigned char *msg, unsigned int msgLen, unsigned char *output);
-void bounce_unroll(unsigned char *msg, unsigned int msgLen, unsigned char *output);
-void bounce_unroll_lr(unsigned char *msg, unsigned int msgLen, unsigned char *output);
-void bounce_unroll_rl(unsigned char *msg, unsigned int msgLen, unsigned char *output);
+void bounce_roll(unsigned char *msg, unsigned int msgLen, unsigned char *output,
+                 unsigned int keySum);
+void bounce_roll_lr(unsigned char *msg, unsigned int msgLen, unsigned char *output,
+                    unsigned int keySum);
+void bounce_roll_rl(unsigned char *msg, unsigned int msgLen, unsigned char *output,
+                    unsigned int keySum);
+void bounce_unroll(unsigned char *msg, unsigned int msgLen, unsigned char *output,
+                   unsigned int keySum);
+void bounce_unroll_lr(unsigned char *msg, unsigned int msgLen, unsigned char *output,
+                      unsigned int keySum);
+void bounce_unroll_rl(unsigned char *msg, unsigned int msgLen, unsigned char *output,
+                      unsigned int keySum);

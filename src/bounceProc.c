@@ -5,7 +5,7 @@
 // Outputs to outFile
 void bounceProcess(FILE *inFile, FILE *outFile, unsigned char *key, bool decryptFlag) {
   // Calculate and store the keySum
-  unsigned char keySum = bounceProcKeySum(key);
+  unsigned int keySum = bounceProcKeySum(key);
   // Input buffer
   static unsigned char buffer[256];
   // XOR buffer (for CBC)
@@ -48,7 +48,7 @@ void bounceProcess(FILE *inFile, FILE *outFile, unsigned char *key, bool decrypt
 void bounceREPL(unsigned char *key, int decryptFlag) {
   unsigned char input[501];
   unsigned char output[501];
-  unsigned char keySum = bounceProcKeySum(key);
+  unsigned int  keySum = bounceProcKeySum(key);
   while (fgets((char *)input, 501, stdin)) {
     // Ignore blank messages
     if (input[0] == 0)
@@ -77,10 +77,12 @@ void bounceREPL(unsigned char *key, int decryptFlag) {
   }
 }
 
-// Helper function to get key sum for first byte
-unsigned char bounceProcKeySum(unsigned char *key) {
-  unsigned char sum = 0;
+// Helper function to get key sum.
+// This function is used for initial state in roll, as well as
+// The Computation of byte to XOR with the first input byte in enc/dec passes.
+unsigned int bounceProcKeySum(unsigned char *key) {
+  unsigned int sum = 0;
   for (int i = 0; i < 256; i++)
-    sum += key[i];
+    sum += SQ(SQ(key[i]));
   return sum;
 }
