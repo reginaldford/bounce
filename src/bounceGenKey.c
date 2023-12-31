@@ -43,18 +43,17 @@ void bounceKeyQualify(unsigned char *key) {
     for (int j = 0; j < 4; j++)
       sum += bitcount(key[4 * i + j]);
     int avg = 0.5 + sum / 4;
+    // If the average set bits of a byte is out of range, randomize more
     if (avg < 2 || avg > 6)
       for (int j = 0; j < 4; j++)
-        key[4 * i + j] ^= goodRandomByte(); // ensures the good avg
+        key[4 * i + j] ^= goodRandomByte();
   }
-  // First and last byte of the key is checked
-  if (bitcount(key[0]) < 2 || bitcount(key[0] > 6))
-    key[0] = goodRandomByte();
-  if (bitcount(key[255]) < 2 || bitcount(key[255] > 6))
-    key[255] = goodRandomByte();
+  // First and last byte of the key is set
+  key[0] = goodRandomByte();
   // First and last byte must be different
-  while (key[0] == key[255])
+  do
     key[255] = goodRandomByte();
+  while (key[0] == key[255]);
 }
 
 // Generate 256 random bytes into outputFile

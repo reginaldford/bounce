@@ -50,15 +50,27 @@ void bounceREPL(unsigned char *key, int decryptFlag) {
   unsigned char output[501];
   unsigned int  keySum = bounceProcKeySum(key);
   while (fgets((char *)input, 501, stdin)) {
-    // Ignore blank messages
-    if (input[0] == 0)
-      continue;
-    // Read user input
-    // Removing the newline from terminal input
+    // Read user input, removing newline char
     unsigned int len = strlen((char *)input) - 1;
-    input[len]       = 0;
+    if (len <= 0)
+      continue;
+    input[len] = 0; // Terminating without the newline
+
     // Decryption turns hex into their byte which is expected to be ascii
     if (decryptFlag) {
+      // Filter out bytes that are not lc letters or digits
+      int filteredLen = 0;
+      for (unsigned int i = 0; i < len; i++) {
+        // Only keeping lowercase a-f and 0-9
+        if ((input[i] <= 102 && input[i] >= 97) || (input[i] >= 48 && input[i] <= 57)) {
+          input[filteredLen++] = input[i];
+        }
+      }
+      // After filtering, we should have a non-empty even-length string
+      if (filteredLen == 0 || filteredLen % 2 != 0)
+        continue;             // completely ignoring this input
+      input[filteredLen] = 0; // Terminating the filtered string
+      len                = filteredLen;
       unsigned char tmp[500];
       for (unsigned int i = 0; i < len; i++)
         sscanf((char *)&input[2 * i], "%2hhx", &tmp[i]);
@@ -78,8 +90,7 @@ void bounceREPL(unsigned char *key, int decryptFlag) {
 }
 
 // Helper function to get key sum.
-// This function is used for initial state in roll, as well as
-// The Computation of byte to XOR with the first input byte in enc/dec passes.
+// This function is used for initial state in roll
 unsigned int bounceProcKeySum(unsigned char *key) {
   unsigned int sum = 0;
   for (int i = 0; i < 256; i++)
