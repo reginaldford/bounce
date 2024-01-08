@@ -24,18 +24,18 @@
 
 // Rolling spreads dependency of every byte to every other byte
 void bounce_roll(unsigned char *msg, unsigned int msgLen, unsigned char *output,
-                 unsigned int keySum) {
+                 unsigned int keySum1, unsigned int keySum2) {
   unsigned char buffer[msgLen];
-  bounce_roll_lr(msg, msgLen, buffer, keySum);
-  bounce_roll_rl(buffer, msgLen, output, keySum);
+  bounce_roll_lr(msg, msgLen, buffer, keySum1);
+  bounce_roll_rl(buffer, msgLen, output, keySum2);
 }
 
 // Undoes rolling
 void bounce_unroll(unsigned char *msg, unsigned int msgLen, unsigned char *output,
-                   unsigned int keySum) {
+                   unsigned int keySum1, unsigned int keySum2) {
   unsigned char buffer[msgLen];
-  bounce_unroll_rl(msg, msgLen, buffer, keySum);
-  bounce_unroll_lr(buffer, msgLen, output, keySum);
+  bounce_unroll_rl(msg, msgLen, buffer, keySum2);
+  bounce_unroll_lr(buffer, msgLen, output, keySum1);
 }
 
 // Roll the information from left to right
