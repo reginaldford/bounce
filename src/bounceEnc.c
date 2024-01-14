@@ -19,8 +19,10 @@ unsigned char *bounce_encrypt_pass(unsigned char *msg, unsigned int msgLen, unsi
   output[0] = table[msg[0]];
   // Main encryption loop
   for (unsigned int i = 1; i + 1 <= msgLen; i++) {
-    // Each iteration uses previously computed output byte as random byte index
-    output[i] = msg[i] ^ (key[output[i - 1]] + key[i]);
+    // Bounce equation first
+    unsigned char index = msg[i] ^ (key[output[i - 1]] + key[i]);
+    // Substitution table second
+    output[i] = table[index];
   }
   return output;
 }
