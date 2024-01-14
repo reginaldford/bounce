@@ -7,6 +7,9 @@ void bounceProcess(FILE *inFile, FILE *outFile, unsigned char *key, bool decrypt
   // Calculate and store the keySum
   unsigned int keySum1 = bounceProcKeySum(key);
   unsigned int keySum2 = bounceProcKeySum(key + 128);
+  // Invertable Swap table generated from key
+  static unsigned char table[256];
+  bounceProcSubTable(key, table);
   // Input buffer
   static unsigned char buffer[256];
   // XOR buffer (for CBC)
@@ -25,12 +28,12 @@ void bounceProcess(FILE *inFile, FILE *outFile, unsigned char *key, bool decrypt
         for (unsigned short i = 0; i < bytes_read / SLL; i++)
           ((long long *)buffer)[i] ^= ((long long *)xBuffer)[i];
         // Encrypt
-        bounce_encrypt(buffer, bytes_read, key, keySum1, keySum2, output);
+        bounce_encrypt(buffer, bytes_read, key, keySum1, keySum2, table, output);
         // Save to xBuffer
         memcpy(xBuffer, output, bytes_read);
       } else { // Decryption case
         // Process data before unCBC
-        bounce_decrypt(buffer, bytes_read, key, keySum1, keySum2, output);
+        bounce_decrypt(buffer, bytes_read, key, keySum1, keySum2, table, output);
         // unCBC
         for (unsigned short i = 0; i < bytes_read / SLL; i++)
           ((long long *)output)[i] ^= ((long long *)xBuffer)[i];
@@ -49,8 +52,12 @@ void bounceProcess(FILE *inFile, FILE *outFile, unsigned char *key, bool decrypt
 void bounceREPL(unsigned char *key, int decryptFlag) {
   unsigned char input[501];
   unsigned char output[501];
-  unsigned int  keySum1 = bounceProcKeySum(key);
-  unsigned int  keySum2 = bounceProcKeySum(key + 128);
+  // Calculate and store the keySum
+  unsigned int keySum1 = bounceProcKeySum(key);
+  unsigned int keySum2 = bounceProcKeySum(key + 128);
+  // Invertable Swap table generated from key
+  static unsigned char table[256];
+  bounceProcSubTable(key, table);
   while (fgets((char *)input, 501, stdin)) {
     // Read user input, removing newline char
     unsigned int len = strlen((char *)input) - 1;
@@ -78,11 +85,11 @@ void bounceREPL(unsigned char *key, int decryptFlag) {
         sscanf((char *)&input[2 * i], "%2hhx", &tmp[i]);
       for (unsigned int i = 0; i < len / 2; i++)
         input[i] = tmp[i];
-      bounce_decrypt(input, len / 2, key, keySum1, keySum2, output);
+      bounce_decrypt(input, len / 2, key, keySum1, keySum2, table, output);
       for (unsigned int i = 0; i < len / 2; i++)
         printf("%c", output[i]);
     } else { // Encrypting
-      bounce_encrypt(input, len, key, keySum1, keySum2, output);
+      bounce_encrypt(input, len, key, keySum1, keySum2, table, output);
       // Print the bytes as 2 ascii chars each, using hex
       for (unsigned int i = 0; i < len; i++)
         printf("%.2x", output[i]);
@@ -98,4 +105,32 @@ unsigned int bounceProcKeySum(unsigned char *key) {
   for (int i = 0; i < 128; i++)
     sum += SQ(SQ(key[i]));
   return sum;
+}
+
+// Swapping two pairs of a self referencing array
+// s.t. array[array[a1]]=a1 and array[array[b1]]=b1 always
+void swap(unsigned char *array, unsigned int a1, unsigned int b1) {
+  unsigned char a2 = array[a1];
+  unsigned char b2 = array[b1];
+  array[a1]        = array[b1];
+  array[b1]        = a2;
+  array[a2]        = array[b2];
+  array[b2]        = a1;
+}
+
+void bounceProcSubTable(unsigned char *key, unsigned char *table) {
+  // This creates a plain, linear, invertable swap table based on the key
+  // s.t. array[array[x]]=x for 0<=x<=255
+  // Setting table to [ 0, 1, 2, 3....]
+  for (int i = 0; i < 256; i++)
+    table[i] = -i; // intentional underflow
+  // Randomly swapping invertible pairs
+  for (int i = 0; i + 1 < 256; i += 2) {
+    unsigned char a1 = key[i];
+    unsigned char b1 = key[i + 1];
+    // If the swap can keep the inversion property, do the swap
+    if (!(a1 == b1 || a1 == table[a1] || b1 == table[b1] || table[a1] == table[b1] ||
+          a1 == table[b1]))
+      swap(table, a1, b1);
+  }
 }

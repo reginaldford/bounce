@@ -4,18 +4,19 @@
 
 // Roll, then encrypt pass
 unsigned char *bounce_encrypt(unsigned char *msg, unsigned int msgLen, unsigned char *key,
-                              unsigned int keySum1, unsigned int keySum2, unsigned char *output) {
+                              unsigned int keySum1, unsigned int keySum2, unsigned char *table,
+                              unsigned char *output) {
   unsigned char buffer[msgLen];
   bounce_roll(msg, msgLen, buffer, keySum1, keySum2);
-  bounce_encrypt_pass(buffer, msgLen, key, output);
+  bounce_encrypt_pass(buffer, msgLen, key, table, output);
   return output;
 }
 
 // Encryption pass
 unsigned char *bounce_encrypt_pass(unsigned char *msg, unsigned int msgLen, unsigned char *key,
-                                   unsigned char *output) {
-  // First output byte is input ^ (random byte)
-  output[0] = msg[0] ^ key[0] ^ key[255];
+                                   unsigned char *table, unsigned char *output) {
+  // Use substitution table to randomize first byte
+  output[0] = table[msg[0]];
   // Main encryption loop
   for (unsigned int i = 1; i + 1 <= msgLen; i++) {
     // Each iteration uses previously computed output byte as random byte index

@@ -17,14 +17,16 @@
 
 // bounceEnc.c
 unsigned char *bounce_encrypt(unsigned char *msg, unsigned int msgLen, unsigned char *key,
-                              unsigned int keySum1, unsigned int keySum2, unsigned char *output);
+                              unsigned int keySum1, unsigned int keySum2, unsigned char *table,
+                              unsigned char *output);
 unsigned char *bounce_encrypt_pass(unsigned char *msg, unsigned int msgLen, unsigned char *key,
-                                   unsigned char *output);
+                                   unsigned char *table, unsigned char *output);
 // bounceDec.c
 unsigned char *bounce_decrypt(unsigned char *msg, unsigned int msgLen, unsigned char *key,
-                              unsigned int keySum1, unsigned int keySum2, unsigned char *output);
+                              unsigned int keySum1, unsigned int keySum2, unsigned char *table,
+                              unsigned char *output);
 unsigned char *bounce_decrypt_pass(unsigned char *msg, unsigned int msgLen, unsigned char *key,
-                                   unsigned char *output);
+                                   unsigned char *table, unsigned char *output);
 // bounceReadFile.c
 bounceReadFileResult bounceReadFile(const char *filePath);
 
@@ -34,6 +36,7 @@ void bounceGenKey(FILE *fp);
 // bounceProc.c
 void         bounceProcess(FILE *inFile, FILE *outfile, unsigned char *key, bool decryptFlag);
 unsigned int bounceProcKeySum(unsigned char *key);
+void         bounceProcSubTable(unsigned char *key, unsigned char *table);
 void         bounceREPL(unsigned char *key, int decryptFlag);
 // bounceRoll.c
 void bounce_roll(unsigned char *msg, unsigned int msgLen, unsigned char *output,
