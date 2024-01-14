@@ -17,7 +17,7 @@ unsigned long long bounceTime() {
 }
 
 // 2's compliment rule to count bits
-int bitcount(unsigned char byte) {
+int bitCount(unsigned char byte) {
   int count;
   for (count = 0; byte; count++)
     byte &= byte - 1;
@@ -29,31 +29,9 @@ unsigned short int goodRandomByte() {
   // Seed the random number generator with the current time
   srand(((unsigned int)-1) & bounceTime());
   unsigned short int output = rand() % 256;
-  while (bitcount(output) < 2 || bitcount(output) > 6)
+  while (bitCount(output) < 2 || bitCount(output) > 6)
     output = rand() % 256;
   return output;
-}
-
-// Ensures that a randomly generated key is good enough
-void bounceKeyQualify(unsigned char *key) {
-  // The average bitcount cannot be out of range
-  // For any chunk of 4 bytes
-  for (int i = 0; i < 256 / 4; i++) {
-    int sum = 0;
-    for (int j = 0; j < 4; j++)
-      sum += bitcount(key[4 * i + j]);
-    int avg = 0.5 + sum / 4;
-    // If the average set bits of a byte is out of range, randomize more
-    if (avg < 2 || avg > 6)
-      for (int j = 0; j < 4; j++)
-        key[4 * i + j] ^= goodRandomByte();
-  }
-  // First and last byte of the key is set
-  key[0] = goodRandomByte();
-  // First and last byte must be different
-  do
-    key[255] = goodRandomByte();
-  while (key[0] == key[255]);
 }
 
 // Generate 256 random bytes into outputFile
@@ -78,14 +56,14 @@ void bounceGenKey(FILE *outputFile) {
   fclose(randFile);
   // XOR the time into the key
   ((long long *)buffer)[0] ^= bounceTime();
-  // Spread time info into key via LR pass
+  // Mix up the buffer by encrypting it with itself as key
   int           keySum1 = bounceProcKeySum(buffer);
   int           keySum2 = bounceProcKeySum(buffer + 128);
   unsigned char table[256];
   bounceProcSubTable(buffer, table);
+  // Using buffer as msg and key
+  // The key mutates as we encrypt, bc the key is the output. Irreversible.
   bounce_encrypt(buffer, 256, buffer, keySum1, keySum2, table, buffer);
-  // Ensure key quality
-  bounceKeyQualify(buffer);
   // Output
   for (int i = 0; i < 256; i++)
     putc(buffer[i], outputFile);
