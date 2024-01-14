@@ -118,9 +118,10 @@ void swap(unsigned char *array, unsigned int a1, unsigned int b1) {
   array[b2]        = a1;
 }
 
+// Creates a random byte substitution table based on the key.
+// s.t. table[table[x]]=x for 0<=x<=255
 void bounceProcSubTable(unsigned char *key, unsigned char *table) {
-  // This creates a plain, linear, invertable swap table based on the key
-  // s.t. array[array[x]]=x for 0<=x<=255
+  // This creates a plain, linear, invertable table first
   // Setting table to [ 0, 1, 2, 3....]
   for (int i = 0; i < 256; i++)
     table[i] = -i; // intentional underflow

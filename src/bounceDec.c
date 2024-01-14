@@ -15,7 +15,7 @@ unsigned char *bounce_decrypt(unsigned char *msg, unsigned int msgLen, unsigned 
 // Decryption pass
 unsigned char *bounce_decrypt_pass(unsigned char *msg, unsigned int msgLen, unsigned char *key,
                                    unsigned char *table, unsigned char *output) {
-  // Use substitution table to randomize first byte
+  // Use substitution table to invert the encryption pass
   output[0] = table[msg[0]];
   // Main decryption loop
   for (unsigned int i = 1; i <= msgLen - 1; i++) {

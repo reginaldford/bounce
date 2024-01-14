@@ -25,7 +25,7 @@
 // Rolling spreads dependency of every byte to every other byte
 void bounce_roll(unsigned char *msg, unsigned int msgLen, unsigned char *output,
                  unsigned int keySum1, unsigned int keySum2) {
-  unsigned char buffer[msgLen];
+  static unsigned char buffer[256];
   bounce_roll_lr(msg, msgLen, buffer, keySum1);
   bounce_roll_rl(buffer, msgLen, output, keySum2);
 }
@@ -33,7 +33,7 @@ void bounce_roll(unsigned char *msg, unsigned int msgLen, unsigned char *output,
 // Undoes rolling
 void bounce_unroll(unsigned char *msg, unsigned int msgLen, unsigned char *output,
                    unsigned int keySum1, unsigned int keySum2) {
-  unsigned char buffer[msgLen];
+  static unsigned char buffer[256];
   bounce_unroll_rl(msg, msgLen, buffer, keySum2);
   bounce_unroll_lr(buffer, msgLen, output, keySum1);
 }
