@@ -15,8 +15,10 @@ unsigned char *bounce_encrypt(unsigned char *msg, unsigned int msgLen, unsigned 
 // Encryption pass
 unsigned char *bounce_encrypt_pass(unsigned char *msg, unsigned int msgLen, unsigned char *key,
                                    unsigned char *table, unsigned char *output) {
+  // Nibble flip
+  output[0] = ((msg[0] & 15) << 4) | ((msg[0] & 240) >> 4);
   // Use substitution table to randomize first byte
-  output[0] = table[msg[0]];
+  output[0] = table[output[0]];
   // Main encryption loop
   for (unsigned int i = 1; i + 1 <= msgLen; i++) {
     // Bounce equation first

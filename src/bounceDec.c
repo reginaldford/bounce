@@ -17,6 +17,8 @@ unsigned char *bounce_decrypt_pass(unsigned char *msg, unsigned int msgLen, unsi
                                    unsigned char *table, unsigned char *output) {
   // Use substitution table to invert the encryption pass
   output[0] = table[msg[0]];
+  // Nibble flip
+  output[0] = ((output[0] & 15) << 4) | ((output[0] & 240) >> 4);
   // Main decryption loop
   for (unsigned int i = 1; i <= msgLen - 1; i++) {
     // Substitution table first

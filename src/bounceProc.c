@@ -107,15 +107,15 @@ unsigned int bounceProcKeySum(unsigned char *key) {
   return sum;
 }
 
-// Swapping two pairs of a self referencing array
-// s.t. array[array[a1]]=a1 and array[array[b1]]=b1 always
-void swap(unsigned char *array, unsigned int a1, unsigned int b1) {
-  unsigned char a2 = array[a1];
-  unsigned char b2 = array[b1];
-  array[a1]        = array[b1];
-  array[b1]        = a2;
-  array[a2]        = array[b2];
-  array[b2]        = a1;
+// Swapping two pairs of a self referencing table
+// s.t. table[table[a1]]=a1 and table[table[b1]]=b1 always
+void swap(unsigned char *table, unsigned int a1, unsigned int b1) {
+  unsigned char a2 = table[a1];
+  unsigned char b2 = table[b1];
+  table[a1]        = table[b1];
+  table[b1]        = a2;
+  table[a2]        = table[b2];
+  table[b2]        = a1;
 }
 
 // Creates a random byte substitution table based on the key.

@@ -16,24 +16,6 @@ unsigned long long bounceTime() {
   return milliseconds;
 }
 
-// 2's compliment rule to count bits
-int bitCount(unsigned char byte) {
-  int count;
-  for (count = 0; byte; count++)
-    byte &= byte - 1;
-  return count;
-}
-
-// Provide a random byte that has 2 to 6 set bits
-unsigned short int goodRandomByte() {
-  // Seed the random number generator with the current time
-  srand(((unsigned int)-1) & bounceTime());
-  unsigned short int output = rand() % 256;
-  while (bitCount(output) < 2 || bitCount(output) > 6)
-    output = rand() % 256;
-  return output;
-}
-
 // Generate 256 random bytes into outputFile
 // Starts with /dev/urandom
 // Mixes it more just in case
