@@ -2,6 +2,7 @@
 
 #include <math.h>
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -21,6 +22,7 @@ unsigned char *bounce_encrypt(unsigned char *msg, unsigned int msgLen, unsigned 
                               unsigned char *output);
 unsigned char *bounce_encrypt_pass(unsigned char *msg, unsigned int msgLen, unsigned char *key,
                                    unsigned char *table, unsigned char *output);
+uint8_t        bounceRflip(uint8_t byte);
 // bounceDec.c
 unsigned char *bounce_decrypt(unsigned char *msg, unsigned int msgLen, unsigned char *key,
                               unsigned int keySum1, unsigned int keySum2, unsigned char *table,
