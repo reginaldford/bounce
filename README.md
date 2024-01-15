@@ -5,6 +5,7 @@ Bounce is an open-source symmetric encryption program designed to be easy to rea
 ## Key Features
 - Readable code. It's designed to be trustworthy, and without unnecessary steps.
 - Powerful encryption: Guessing a 256 byte key is much harder than guessing a 256 bit key.
+- Standalone Executable written in standard C relies on no dynamic libraries or static libraries other than glibc.
 - Fast. The program does the hard work first: generating a substitution table and key sums.
 - Ease of use: Generate a 256-byte key and encrypt or decrypt files easily.
 - Efficient for messages as small as 1 byte, and works for large files.
@@ -15,7 +16,7 @@ Bounce is an open-source symmetric encryption program designed to be easy to rea
 - REPL mode allows chat-style encryption and decryption between formats for copy and paste.
   
 ## Explanation of the algorithm
-### Bounce is defined in terms of standard C operations.
+  ### Bounce is defined in terms of standard C operations.
 - View [bounceProc.c](src/bounceProc.c) to see the entire encryption / decryption processes from the top.
 - View [bounceRoll.c](src/bounceRoll.c) to see the rolling procedure which makes all bytes depend on all other bytes.
 - View [bounceEnc.c](src/bounceEnc.c) and [bounceDec.c](src/bounceEnc.c) for the bounce encryption/decryption procedures.
@@ -36,7 +37,7 @@ To get started with Bounce, follow these simple steps:
    sudo make install
   
 
-## Help , straight form the CLI
+## Help displayed by **bounce -h**
 
 ```shell
 Uses and examples:
