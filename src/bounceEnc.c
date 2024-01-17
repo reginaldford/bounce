@@ -29,18 +29,20 @@ unsigned char *bounce_encrypt_pass(unsigned char *msg, unsigned int msgLen, unsi
   return output;
 }
 
-// Recursive flipping of a byte: nibbles, crumbs
-// Leave the bits inside crumbs unflipped, else we get full byte reversal
-// Note: byte = bounceRflip(bounceRflip(byte))
+// Add 128, reverse, add 128
 uint8_t bounceRflip(uint8_t byte) {
-  uint8_t crumbs[4];
-  uint8_t nibbles[2];
-  // Divide the byte into 4 crumbs
-  for (int i = 0; i < 4; i++)
-    crumbs[i] = (byte >> (2 * i)) & 0x03;
-  // Flip the crumbs inside the nibbles
-  nibbles[1] = (crumbs[1] << 2) | crumbs[0];
-  nibbles[0] = (crumbs[3] << 2) | crumbs[2];
-  // Flip the nibbles inside the output byte
-  return ((nibbles[1] << 4) | nibbles[0]);
+  // Add 128
+  byte += 128;
+  // Reverse
+  uint8_t rbyte = 0;
+  for (int i = 0; i < 8; i++) {
+    rbyte = rbyte | (byte & 1);
+    if (i < 7) {
+      rbyte = rbyte << 1;
+      byte  = byte >> 1;
+    }
+  }
+  // Add 128
+  rbyte += 128;
+  return rbyte;
 }
