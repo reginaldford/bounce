@@ -22,7 +22,6 @@ uint8_t *bounce_encrypt(uint8_t *msg, uint32_t msgLen, uint8_t *key, uint32_t ke
 uint8_t *bounce_encrypt_pass(uint8_t *msg, uint32_t msgLen, uint8_t *key, uint8_t *table,
                              uint8_t *output);
 uint8_t  bounce_trade_byte(uint8_t byte);
-// bounceDec.c
 uint8_t *bounce_decrypt(uint8_t *msg, uint32_t msgLen, uint8_t *key, uint32_t keySum1,
                         uint32_t keySum2, uint8_t *table, uint8_t *output);
 uint8_t *bounce_decrypt_pass(uint8_t *msg, uint32_t msgLen, uint8_t *key, uint8_t *table,
