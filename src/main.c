@@ -122,7 +122,7 @@ int main(int num_args, char **args) {
     printf("Could not read key file\n"); // should use stderr
     exit(EXIT_FAILURE);
   }
-  unsigned char *key = keyFileResult.fileContent;
+  uint8_t *key = keyFileResult.fileContent;
 
   // If -i was used, open input file
   if (inFilePath) {

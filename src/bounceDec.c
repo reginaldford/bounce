@@ -3,18 +3,17 @@
 #include "bounce.h"
 
 // Decrypt pass, then unroll
-unsigned char *bounce_decrypt(unsigned char *msg, unsigned int msgLen, unsigned char *key,
-                              unsigned int keySum1, unsigned int keySum2, unsigned char *table,
-                              unsigned char *output) {
-  unsigned char buffer[msgLen];
+uint8_t *bounce_decrypt(uint8_t *msg, unsigned int msgLen, uint8_t *key, unsigned int keySum1,
+                        unsigned int keySum2, uint8_t *table, uint8_t *output) {
+  uint8_t buffer[msgLen];
   bounce_decrypt_pass(msg, msgLen, key, table, buffer);
   bounce_unroll(buffer, msgLen, output, keySum1, keySum2);
   return output;
 }
 
 // Decryption pass
-unsigned char *bounce_decrypt_pass(unsigned char *msg, unsigned int msgLen, unsigned char *key,
-                                   unsigned char *table, unsigned char *output) {
+uint8_t *bounce_decrypt_pass(uint8_t *msg, unsigned int msgLen, uint8_t *key, uint8_t *table,
+                             uint8_t *output) {
   // Use substitution table to invert the encryption pass
   output[0] = table[msg[0]];
   // Recusive bit flipping
@@ -22,7 +21,7 @@ unsigned char *bounce_decrypt_pass(unsigned char *msg, unsigned int msgLen, unsi
   // Main decryption loop
   for (unsigned int i = 1; i <= msgLen - 1; i++) {
     // Substitution table first
-    unsigned char msgi = table[msg[i]];
+    uint8_t msgi = table[msg[i]];
     // Bounce equation second
     output[i] = msgi ^ (key[msg[i - 1]] + key[i]);
   }

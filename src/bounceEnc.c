@@ -3,18 +3,17 @@
 #include "bounce.h"
 
 // Roll, then encrypt pass
-unsigned char *bounce_encrypt(unsigned char *msg, unsigned int msgLen, unsigned char *key,
-                              unsigned int keySum1, unsigned int keySum2, unsigned char *table,
-                              unsigned char *output) {
-  unsigned char buffer[msgLen];
+uint8_t *bounce_encrypt(uint8_t *msg, unsigned int msgLen, uint8_t *key, unsigned int keySum1,
+                        unsigned int keySum2, uint8_t *table, uint8_t *output) {
+  uint8_t buffer[msgLen];
   bounce_roll(msg, msgLen, buffer, keySum1, keySum2);
   bounce_encrypt_pass(buffer, msgLen, key, table, output);
   return output;
 }
 
 // Encryption pass
-unsigned char *bounce_encrypt_pass(unsigned char *msg, unsigned int msgLen, unsigned char *key,
-                                   unsigned char *table, unsigned char *output) {
+uint8_t *bounce_encrypt_pass(uint8_t *msg, unsigned int msgLen, uint8_t *key, uint8_t *table,
+                             uint8_t *output) {
   // Recusive bit flipping
   output[0] = bounceRflip(msg[0]);
   // Use substitution table to randomize first byte
@@ -22,7 +21,7 @@ unsigned char *bounce_encrypt_pass(unsigned char *msg, unsigned int msgLen, unsi
   // Main encryption loop
   for (unsigned int i = 1; i + 1 <= msgLen; i++) {
     // Bounce equation first
-    unsigned char index = msg[i] ^ (key[output[i - 1]] + key[i]);
+    uint8_t index = msg[i] ^ (key[output[i - 1]] + key[i]);
     // Substitution table second
     output[i] = table[index];
   }

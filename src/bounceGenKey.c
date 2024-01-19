@@ -21,8 +21,8 @@ unsigned long long bounceTime() {
 // Mixes it more just in case
 void bounceGenKey(FILE *outputFile) {
   // 256 byte buffer is the key and msg
-  unsigned char buffer[256];
-  FILE         *randFile;
+  uint8_t buffer[256];
+  FILE   *randFile;
   // Open /dev/urandom for reading
   randFile = fopen("/dev/urandom", "rb");
   if (randFile == NULL) {
@@ -39,9 +39,9 @@ void bounceGenKey(FILE *outputFile) {
   // XOR the time into the key
   ((long long *)buffer)[0] ^= bounceTime();
   // Mix up the buffer by encrypting it with itself as key
-  int           keySum1 = bounceProcKeySum(buffer);
-  int           keySum2 = bounceProcKeySum(buffer + 128);
-  unsigned char table[256];
+  int     keySum1 = bounceProcKeySum(buffer);
+  int     keySum2 = bounceProcKeySum(buffer + 128);
+  uint8_t table[256];
   bounceProcSubTable(buffer, table);
   // Using buffer as msg and key
   // The key mutates as we encrypt, bc the key is the output. Irreversible.

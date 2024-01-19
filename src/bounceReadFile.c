@@ -21,7 +21,7 @@ bounceReadFileResult bounceReadFile(const char *filePath) {
   fileSize = ftell(file);
   fseek(file, 0, SEEK_SET);
   // Allocate memory for the file contents
-  unsigned char *fileData = (unsigned char *)malloc(fileSize);
+  uint8_t *fileData = (uint8_t *)malloc(fileSize);
   if (fileData == NULL) {
     perror("Error allocating memory");
     fclose(file);

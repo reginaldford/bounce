@@ -3,19 +3,19 @@
 
 // Applies CBC and Bounce Algorithm for an inFile
 // Outputs to outFile
-void bounceProcess(FILE *inFile, FILE *outFile, unsigned char *key, bool decryptFlag) {
+void bounceProcess(FILE *inFile, FILE *outFile, uint8_t *key, bool decryptFlag) {
   // Calculate and store the keySum
   unsigned int keySum1 = bounceProcKeySum(key);
   unsigned int keySum2 = bounceProcKeySum(key + 128);
   // Invertable Swap table generated from key
-  static unsigned char table[256];
+  static uint8_t table[256];
   bounceProcSubTable(key, table);
   // Input buffer
-  static unsigned char buffer[256];
+  static uint8_t buffer[256];
   // XOR buffer (for CBC)
-  static unsigned char xBuffer[256];
+  static uint8_t xBuffer[256];
   // Output buffer
-  static unsigned char output[256];
+  static uint8_t output[256];
   // Zero the xBuffer
   memset(xBuffer, 0, 256);
   // Load data in the buffer
@@ -49,14 +49,14 @@ void bounceProcess(FILE *inFile, FILE *outFile, unsigned char *key, bool decrypt
 }
 
 // Read, Evaluate, Print loop mode
-void bounceREPL(unsigned char *key, int decryptFlag) {
-  unsigned char input[501];
-  unsigned char output[501];
+void bounceREPL(uint8_t *key, int decryptFlag) {
+  uint8_t input[501];
+  uint8_t output[501];
   // Calculate and store the keySum
   unsigned int keySum1 = bounceProcKeySum(key);
   unsigned int keySum2 = bounceProcKeySum(key + 128);
   // Invertable Swap table generated from key
-  static unsigned char table[256];
+  static uint8_t table[256];
   bounceProcSubTable(key, table);
   while (fgets((char *)input, 501, stdin)) {
     // Read user input, removing newline char
@@ -80,7 +80,7 @@ void bounceREPL(unsigned char *key, int decryptFlag) {
         continue;             // completely ignoring this input
       input[filteredLen] = 0; // Terminating the filtered string
       len                = filteredLen;
-      unsigned char tmp[500];
+      uint8_t tmp[500];
       for (unsigned int i = 0; i < len; i++)
         sscanf((char *)&input[2 * i], "%2hhx", &tmp[i]);
       for (unsigned int i = 0; i < len / 2; i++)
@@ -100,7 +100,7 @@ void bounceREPL(unsigned char *key, int decryptFlag) {
 
 // Helper function to get key sum for half of key
 // This function is used for initial state in roll
-unsigned int bounceProcKeySum(unsigned char *key) {
+unsigned int bounceProcKeySum(uint8_t *key) {
   unsigned int sum = 0;
   for (int i = 0; i < 128; i++)
     sum += SQ(SQ(key[i]));
@@ -109,26 +109,26 @@ unsigned int bounceProcKeySum(unsigned char *key) {
 
 // Swapping two pairs of a self referencing table
 // s.t. table[table[a1]]=a1 and table[table[b1]]=b1 always
-void swap(unsigned char *table, unsigned int a1, unsigned int b1) {
-  unsigned char a2 = table[a1];
-  unsigned char b2 = table[b1];
-  table[a1]        = table[b1];
-  table[b1]        = a2;
-  table[a2]        = table[b2];
-  table[b2]        = a1;
+void swap(uint8_t *table, unsigned int a1, unsigned int b1) {
+  uint8_t a2 = table[a1];
+  uint8_t b2 = table[b1];
+  table[a1]  = table[b1];
+  table[b1]  = a2;
+  table[a2]  = table[b2];
+  table[b2]  = a1;
 }
 
 // Creates a random byte substitution table based on the key.
 // s.t. table[table[x]]=x for 0<=x<=255
-void bounceProcSubTable(unsigned char *key, unsigned char *table) {
+void bounceProcSubTable(uint8_t *key, uint8_t *table) {
   // This creates a plain, linear, invertable table first
   // Setting table to [ 0, 1, 2, 3....]
   for (int i = 0; i < 256; i++)
     table[i] = -i; // intentional underflow
   // Randomly swapping invertible pairs
   for (int i = 0; i + 1 < 256; i += 2) {
-    unsigned char a1 = key[i];
-    unsigned char b1 = key[i + 1];
+    uint8_t a1 = key[i];
+    uint8_t b1 = key[i + 1];
     // If the swap can keep the inversion property, do the swap
     if (!(a1 == b1 || a1 == table[a1] || b1 == table[b1] || table[a1] == table[b1] ||
           a1 == table[b1]))

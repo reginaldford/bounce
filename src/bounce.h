@@ -17,18 +17,16 @@
 #define SQ(x) (x * x)
 
 // bounceEnc.c
-unsigned char *bounce_encrypt(unsigned char *msg, unsigned int msgLen, unsigned char *key,
-                              unsigned int keySum1, unsigned int keySum2, unsigned char *table,
-                              unsigned char *output);
-unsigned char *bounce_encrypt_pass(unsigned char *msg, unsigned int msgLen, unsigned char *key,
-                                   unsigned char *table, unsigned char *output);
-uint8_t        bounceRflip(uint8_t byte);
+uint8_t *bounce_encrypt(uint8_t *msg, unsigned int msgLen, uint8_t *key, unsigned int keySum1,
+                        unsigned int keySum2, uint8_t *table, uint8_t *output);
+uint8_t *bounce_encrypt_pass(uint8_t *msg, unsigned int msgLen, uint8_t *key, uint8_t *table,
+                             uint8_t *output);
+uint8_t  bounceRflip(uint8_t byte);
 // bounceDec.c
-unsigned char *bounce_decrypt(unsigned char *msg, unsigned int msgLen, unsigned char *key,
-                              unsigned int keySum1, unsigned int keySum2, unsigned char *table,
-                              unsigned char *output);
-unsigned char *bounce_decrypt_pass(unsigned char *msg, unsigned int msgLen, unsigned char *key,
-                                   unsigned char *table, unsigned char *output);
+uint8_t *bounce_decrypt(uint8_t *msg, unsigned int msgLen, uint8_t *key, unsigned int keySum1,
+                        unsigned int keySum2, uint8_t *table, uint8_t *output);
+uint8_t *bounce_decrypt_pass(uint8_t *msg, unsigned int msgLen, uint8_t *key, uint8_t *table,
+                             uint8_t *output);
 // bounceReadFile.c
 bounceReadFileResult bounceReadFile(const char *filePath);
 
@@ -36,20 +34,16 @@ bounceReadFileResult bounceReadFile(const char *filePath);
 void bounceGenKey(FILE *fp);
 
 // bounceProc.c
-void         bounceProcess(FILE *inFile, FILE *outfile, unsigned char *key, bool decryptFlag);
-unsigned int bounceProcKeySum(unsigned char *key);
-void         bounceProcSubTable(unsigned char *key, unsigned char *table);
-void         bounceREPL(unsigned char *key, int decryptFlag);
+void         bounceProcess(FILE *inFile, FILE *outfile, uint8_t *key, bool decryptFlag);
+unsigned int bounceProcKeySum(uint8_t *key);
+void         bounceProcSubTable(uint8_t *key, uint8_t *table);
+void         bounceREPL(uint8_t *key, int decryptFlag);
 // bounceRoll.c
-void bounce_roll(unsigned char *msg, unsigned int msgLen, unsigned char *output,
-                 unsigned int keySum1, unsigned int keySum2);
-void bounce_roll_lr(unsigned char *msg, unsigned int msgLen, unsigned char *output,
-                    unsigned int keySum);
-void bounce_roll_rl(unsigned char *msg, unsigned int msgLen, unsigned char *output,
-                    unsigned int keySum);
-void bounce_unroll(unsigned char *msg, unsigned int msgLen, unsigned char *output,
-                   unsigned int keySum1, unsigned int keySum2);
-void bounce_unroll_lr(unsigned char *msg, unsigned int msgLen, unsigned char *output,
-                      unsigned int keySum);
-void bounce_unroll_rl(unsigned char *msg, unsigned int msgLen, unsigned char *output,
-                      unsigned int keySum);
+void bounce_roll(uint8_t *msg, unsigned int msgLen, uint8_t *output, unsigned int keySum1,
+                 unsigned int keySum2);
+void bounce_roll_lr(uint8_t *msg, unsigned int msgLen, uint8_t *output, unsigned int keySum);
+void bounce_roll_rl(uint8_t *msg, unsigned int msgLen, uint8_t *output, unsigned int keySum);
+void bounce_unroll(uint8_t *msg, unsigned int msgLen, uint8_t *output, unsigned int keySum1,
+                   unsigned int keySum2);
+void bounce_unroll_lr(uint8_t *msg, unsigned int msgLen, uint8_t *output, unsigned int keySum);
+void bounce_unroll_rl(uint8_t *msg, unsigned int msgLen, uint8_t *output, unsigned int keySum);
