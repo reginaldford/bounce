@@ -5,8 +5,8 @@
 // Outputs to outFile
 void bounceProcess(FILE *inFile, FILE *outFile, uint8_t *key, bool decryptFlag) {
   // Calculate and store the keySum
-  unsigned int keySum1 = bounceProcKeySum(key);
-  unsigned int keySum2 = bounceProcKeySum(key + 128);
+  uint32_t keySum1 = bounceProcKeySum(key);
+  uint32_t keySum2 = bounceProcKeySum(key + 128);
   // Invertable Swap table generated from key
   static uint8_t table[256];
   bounceProcSubTable(key, table);
@@ -53,14 +53,14 @@ void bounceREPL(uint8_t *key, int decryptFlag) {
   uint8_t input[501];
   uint8_t output[501];
   // Calculate and store the keySum
-  unsigned int keySum1 = bounceProcKeySum(key);
-  unsigned int keySum2 = bounceProcKeySum(key + 128);
+  uint32_t keySum1 = bounceProcKeySum(key);
+  uint32_t keySum2 = bounceProcKeySum(key + 128);
   // Invertable Swap table generated from key
   static uint8_t table[256];
   bounceProcSubTable(key, table);
   while (fgets((char *)input, 501, stdin)) {
     // Read user input, removing newline char
-    unsigned int len = strlen((char *)input) - 1;
+    uint32_t len = strlen((char *)input) - 1;
     if (len <= 0)
       continue;
     input[len] = 0; // Terminating without the newline
@@ -69,7 +69,7 @@ void bounceREPL(uint8_t *key, int decryptFlag) {
     if (decryptFlag) {
       // Filter out bytes that are not lc letters or digits
       int filteredLen = 0;
-      for (unsigned int i = 0; i < len; i++) {
+      for (uint32_t i = 0; i < len; i++) {
         // Only keeping lowercase a-f and 0-9
         if ((input[i] <= 102 && input[i] >= 97) || (input[i] >= 48 && input[i] <= 57)) {
           input[filteredLen++] = input[i];
@@ -81,17 +81,17 @@ void bounceREPL(uint8_t *key, int decryptFlag) {
       input[filteredLen] = 0; // Terminating the filtered string
       len                = filteredLen;
       uint8_t tmp[500];
-      for (unsigned int i = 0; i < len; i++)
+      for (uint32_t i = 0; i < len; i++)
         sscanf((char *)&input[2 * i], "%2hhx", &tmp[i]);
-      for (unsigned int i = 0; i < len / 2; i++)
+      for (uint32_t i = 0; i < len / 2; i++)
         input[i] = tmp[i];
       bounce_decrypt(input, len / 2, key, keySum1, keySum2, table, output);
-      for (unsigned int i = 0; i < len / 2; i++)
+      for (uint32_t i = 0; i < len / 2; i++)
         printf("%c", output[i]);
     } else { // Encrypting
       bounce_encrypt(input, len, key, keySum1, keySum2, table, output);
       // Print the bytes as 2 ascii chars each, using hex
-      for (unsigned int i = 0; i < len; i++)
+      for (uint32_t i = 0; i < len; i++)
         printf("%.2x", output[i]);
     }
     printf("\n");
@@ -100,8 +100,8 @@ void bounceREPL(uint8_t *key, int decryptFlag) {
 
 // Helper function to get key sum for half of key
 // This function is used for initial state in roll
-unsigned int bounceProcKeySum(uint8_t *key) {
-  unsigned int sum = 0;
+uint32_t bounceProcKeySum(uint8_t *key) {
+  uint32_t sum = 0;
   for (int i = 0; i < 128; i++)
     sum += SQ(SQ(key[i]));
   return sum;
@@ -109,7 +109,7 @@ unsigned int bounceProcKeySum(uint8_t *key) {
 
 // Swapping two pairs of a self referencing table
 // s.t. table[table[a1]]=a1 and table[table[b1]]=b1 always
-void swap(uint8_t *table, unsigned int a1, unsigned int b1) {
+void swap(uint8_t *table, uint32_t a1, uint32_t b1) {
   uint8_t a2 = table[a1];
   uint8_t b2 = table[b1];
   table[a1]  = table[b1];

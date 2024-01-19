@@ -17,15 +17,15 @@
 #define SQ(x) (x * x)
 
 // bounceEnc.c
-uint8_t *bounce_encrypt(uint8_t *msg, unsigned int msgLen, uint8_t *key, unsigned int keySum1,
-                        unsigned int keySum2, uint8_t *table, uint8_t *output);
-uint8_t *bounce_encrypt_pass(uint8_t *msg, unsigned int msgLen, uint8_t *key, uint8_t *table,
+uint8_t *bounce_encrypt(uint8_t *msg, uint32_t msgLen, uint8_t *key, uint32_t keySum1,
+                        uint32_t keySum2, uint8_t *table, uint8_t *output);
+uint8_t *bounce_encrypt_pass(uint8_t *msg, uint32_t msgLen, uint8_t *key, uint8_t *table,
                              uint8_t *output);
 uint8_t  bounceRflip(uint8_t byte);
 // bounceDec.c
-uint8_t *bounce_decrypt(uint8_t *msg, unsigned int msgLen, uint8_t *key, unsigned int keySum1,
-                        unsigned int keySum2, uint8_t *table, uint8_t *output);
-uint8_t *bounce_decrypt_pass(uint8_t *msg, unsigned int msgLen, uint8_t *key, uint8_t *table,
+uint8_t *bounce_decrypt(uint8_t *msg, uint32_t msgLen, uint8_t *key, uint32_t keySum1,
+                        uint32_t keySum2, uint8_t *table, uint8_t *output);
+uint8_t *bounce_decrypt_pass(uint8_t *msg, uint32_t msgLen, uint8_t *key, uint8_t *table,
                              uint8_t *output);
 // bounceReadFile.c
 bounceReadFileResult bounceReadFile(const char *filePath);
@@ -34,16 +34,16 @@ bounceReadFileResult bounceReadFile(const char *filePath);
 void bounceGenKey(FILE *fp);
 
 // bounceProc.c
-void         bounceProcess(FILE *inFile, FILE *outfile, uint8_t *key, bool decryptFlag);
-unsigned int bounceProcKeySum(uint8_t *key);
-void         bounceProcSubTable(uint8_t *key, uint8_t *table);
-void         bounceREPL(uint8_t *key, int decryptFlag);
+void     bounceProcess(FILE *inFile, FILE *outfile, uint8_t *key, bool decryptFlag);
+uint32_t bounceProcKeySum(uint8_t *key);
+void     bounceProcSubTable(uint8_t *key, uint8_t *table);
+void     bounceREPL(uint8_t *key, int decryptFlag);
 // bounceRoll.c
-void bounce_roll(uint8_t *msg, unsigned int msgLen, uint8_t *output, unsigned int keySum1,
-                 unsigned int keySum2);
-void bounce_roll_lr(uint8_t *msg, unsigned int msgLen, uint8_t *output, unsigned int keySum);
-void bounce_roll_rl(uint8_t *msg, unsigned int msgLen, uint8_t *output, unsigned int keySum);
-void bounce_unroll(uint8_t *msg, unsigned int msgLen, uint8_t *output, unsigned int keySum1,
-                   unsigned int keySum2);
-void bounce_unroll_lr(uint8_t *msg, unsigned int msgLen, uint8_t *output, unsigned int keySum);
-void bounce_unroll_rl(uint8_t *msg, unsigned int msgLen, uint8_t *output, unsigned int keySum);
+void bounce_roll(uint8_t *msg, uint32_t msgLen, uint8_t *output, uint32_t keySum1,
+                 uint32_t keySum2);
+void bounce_roll_lr(uint8_t *msg, uint32_t msgLen, uint8_t *output, uint32_t keySum);
+void bounce_roll_rl(uint8_t *msg, uint32_t msgLen, uint8_t *output, uint32_t keySum);
+void bounce_unroll(uint8_t *msg, uint32_t msgLen, uint8_t *output, uint32_t keySum1,
+                   uint32_t keySum2);
+void bounce_unroll_lr(uint8_t *msg, uint32_t msgLen, uint8_t *output, uint32_t keySum);
+void bounce_unroll_rl(uint8_t *msg, uint32_t msgLen, uint8_t *output, uint32_t keySum);
