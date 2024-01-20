@@ -3,9 +3,9 @@
 #include "bounce.h"
 
 // Get the time, as precise as possible
-unsigned long long bounceTime() {
-  struct timespec    current_time;
-  unsigned long long milliseconds;
+uint64_t bounceTime() {
+  struct timespec current_time;
+  uint64_t        milliseconds;
   if (clock_gettime(CLOCK_REALTIME, &current_time) == 0) {
     // Calculate the time in milliseconds
     milliseconds = current_time.tv_sec * 1000LL + current_time.tv_nsec / 1000000LL;
@@ -37,7 +37,7 @@ void bounceGenKey(FILE *outputFile) {
   }
   fclose(randFile);
   // XOR the time into the key
-  ((long long *)buffer)[0] ^= bounceTime();
+  ((uint64_t *)buffer)[0] ^= bounceTime();
   // Mix up the buffer by encrypting it with itself as key
   int     keySum1 = bounceProcKeySum(buffer);
   int     keySum2 = bounceProcKeySum(buffer + 128);

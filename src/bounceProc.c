@@ -1,5 +1,4 @@
 #include "bounce.h"
-#define SLL sizeof(long long)
 
 // Applies CBC and Bounce Algorithm for an inFile
 // Outputs to outFile
@@ -25,8 +24,8 @@ void bounceProcess(FILE *inFile, FILE *outFile, uint8_t *key, bool decryptFlag) 
       // Encryption case
       if (!decryptFlag) {
         // CBC before encrypting
-        for (unsigned short i = 0; i < bytes_read / SLL; i++)
-          ((long long *)buffer)[i] ^= ((long long *)xBuffer)[i];
+        for (unsigned short i = 0; i < bytes_read / 8; i++)
+          ((uint64_t *)buffer)[i] ^= ((uint64_t *)xBuffer)[i];
         // Encrypt
         bounce_encrypt(buffer, bytes_read, key, keySum1, keySum2, table, output);
         // Save to xBuffer
@@ -35,8 +34,8 @@ void bounceProcess(FILE *inFile, FILE *outFile, uint8_t *key, bool decryptFlag) 
         // Process data before unCBC
         bounce_decrypt(buffer, bytes_read, key, keySum1, keySum2, table, output);
         // unCBC
-        for (unsigned short i = 0; i < bytes_read / SLL; i++)
-          ((long long *)output)[i] ^= ((long long *)xBuffer)[i];
+        for (unsigned short i = 0; i < bytes_read / 8; i++)
+          ((uint64_t *)output)[i] ^= ((uint64_t *)xBuffer)[i];
         // Save buffer to xBuffer
         memcpy(xBuffer, buffer, bytes_read);
       }
@@ -112,14 +111,14 @@ uint32_t bounceProcKeySum(uint8_t *key) {
 void swap(uint8_t *table, uint32_t a1, uint32_t b1) {
   uint8_t a2 = table[a1];
   uint8_t b2 = table[b1];
-  table[a1]  = table[b1];
+  table[a1]  = b2;
   table[b1]  = a2;
   table[a2]  = table[b2];
   table[b2]  = a1;
 }
 
 // Creates a random byte substitution table based on the key.
-// s.t. table[table[x]]=x for 0<=x<=255
+// s.t. table[ table [ x ] ] = x for 0 <= x <= 255
 void bounceProcSubTable(uint8_t *key, uint8_t *table) {
   // This creates a plain, linear, invertable table first
   // Setting table to [ 0, 1, 2, 3....]
