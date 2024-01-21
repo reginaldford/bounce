@@ -113,22 +113,21 @@ void swap(uint8_t *table, uint32_t a1, uint32_t b1) {
   uint8_t b2 = table[b1];
   table[a1]  = b2;
   table[b1]  = a2;
-  table[a2]  = table[b2];
+  table[a2]  = b1;
   table[b2]  = a1;
 }
 
 // Creates a random byte substitution table based on the key.
-// s.t. table[ table [ x ] ] = x for 0 <= x <= 255
 void bounceProcSubTable(uint8_t *key, uint8_t *table) {
-  // This creates a plain, linear, invertable table first
-  // Setting table to [ 0, 1, 2, 3....]
+  // Setting table to [ 255 254 ... 0 ]
+  // Notice that table[ table [ i ] ] = i for all x
   for (int i = 0; i < 256; i++)
-    table[i] = -i; // intentional underflow
-  // Randomly swapping invertible pairs
+    table[i] = 256 - i;
+  // Swapping element pairs of table based on the key
   for (int i = 0; i + 1 < 256; i += 2) {
     uint8_t a1 = key[i];
     uint8_t b1 = key[i + 1];
-    // If the swap can keep the inversion property, do the swap
+    // If the swap can keep table[ table [ i ] ] = i for all i, do the swap
     if (!(a1 == b1 || a1 == table[a1] || b1 == table[b1] || table[a1] == table[b1] ||
           a1 == table[b1]))
       swap(table, a1, b1);
