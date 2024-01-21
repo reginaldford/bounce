@@ -11,10 +11,10 @@ void bounceProcess(FILE *inFile, FILE *outFile, uint8_t *key, bool decryptFlag) 
   bounceProcSubTable(key, table);
   // Input buffer
   static uint8_t buffer[256];
-  // XOR buffer (for CBC)
-  static uint8_t xBuffer[256];
   // Output buffer
   static uint8_t output[256];
+  // XOR buffer (for CBC)
+  static uint8_t xBuffer[256];
   // Zero the xBuffer
   memset(xBuffer, 0, 256);
   // Load data in the buffer

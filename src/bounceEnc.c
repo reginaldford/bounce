@@ -23,7 +23,7 @@ uint8_t *bounce_decrypt(uint8_t *msg, uint32_t msgLen, uint8_t *key, uint32_t ke
 // Encryption pass
 uint8_t *bounce_encrypt_pass(uint8_t *msg, uint32_t msgLen, uint8_t *key, uint8_t *table,
                              uint8_t *output) {
-  // Recusive bit flipping
+  // Trade this byte for another psuedo-random byte
   output[0] = bounce_trade_byte(msg[0]);
   // Use substitution table to randomize first byte
   output[0] = table[output[0]];
@@ -42,7 +42,7 @@ uint8_t *bounce_decrypt_pass(uint8_t *msg, uint32_t msgLen, uint8_t *key, uint8_
                              uint8_t *output) {
   // Use substitution table to invert the encryption pass
   output[0] = table[msg[0]];
-  // Recusive bit flipping
+  // Trade this byte for another psuedo-random byte
   output[0] = bounce_trade_byte(output[0]);
   // Main decryption loop
   for (uint32_t i = 1; i <= msgLen - 1; i++) {

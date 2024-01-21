@@ -2,8 +2,9 @@
 
 #include "bounce.h"
 
-// There are 4 functions composed of these 2 macros, only differing on the last line
-// So the last line is the parameter to the macro
+// There are 4 functions (roll_lr, roll_rl, unroll_lr, unroll_rl),
+// that each use 1 these 2 macros, only differing on the last line.
+// The last line uses the parameter to the macro (sum_update)
 #define ROLL_MACRO_LR(sum_update)                                                                  \
   uint32_t sum = initState;                                                                        \
   for (uint32_t i = 0; i < msgLen; i++) {                                                          \
@@ -25,7 +26,7 @@
 // Rolling spreads dependency of every byte to every other byte
 void bounce_roll(uint8_t *msg, uint32_t msgLen, uint8_t *output, uint32_t keySum1,
                  uint32_t keySum2) {
-  static uint8_t buffer[256];
+  uint8_t buffer[msgLen];
   bounce_roll_lr(msg, msgLen, buffer, keySum1);
   bounce_roll_rl(buffer, msgLen, output, keySum2);
 }
@@ -33,7 +34,7 @@ void bounce_roll(uint8_t *msg, uint32_t msgLen, uint8_t *output, uint32_t keySum
 // Undoes rolling
 void bounce_unroll(uint8_t *msg, uint32_t msgLen, uint8_t *output, uint32_t keySum1,
                    uint32_t keySum2) {
-  static uint8_t buffer[256];
+  uint8_t buffer[msgLen];
   bounce_unroll_rl(msg, msgLen, buffer, keySum2);
   bounce_unroll_lr(buffer, msgLen, output, keySum1);
 }
