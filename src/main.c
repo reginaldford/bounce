@@ -17,7 +17,7 @@ void bounceGiveHelp(char **args) {
     clear  = "\033[0m";
   }
 
-  printf("Bounce v0.0693\n");
+  printf("Bounce v0.0694\n");
   printf("Copyright (c) 2024 Rex Ford\n");
   printf("%s", blue);
   printf("Source code and BSD license is at github.com/reginaldford/bounce\n\n");
