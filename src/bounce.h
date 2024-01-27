@@ -38,11 +38,15 @@ uint32_t bounceProcKeySum(uint8_t *key);
 void     bounceProcSubTable(uint8_t *key, uint8_t *table);
 void     bounceREPL(uint8_t *key, int decryptFlag);
 // bounceRoll.c
-void bounce_roll(uint8_t *msg, uint32_t msgLen, uint8_t *output, uint32_t keySum1,
-                 uint32_t keySum2);
-void bounce_roll_lr(uint8_t *msg, uint32_t msgLen, uint8_t *output, uint32_t keySum);
-void bounce_roll_rl(uint8_t *msg, uint32_t msgLen, uint8_t *output, uint32_t keySum);
+void bounce_roll(uint8_t *msg, uint32_t msgLen, uint8_t *output, uint32_t keySum1, uint32_t keySum2,
+                 uint8_t *table);
+void bounce_roll_lr(uint8_t *msg, uint32_t msgLen, uint8_t *output, uint32_t keySum,
+                    uint8_t *table);
+void bounce_roll_rl(uint8_t *msg, uint32_t msgLen, uint8_t *output, uint32_t keySum,
+                    uint8_t *table);
 void bounce_unroll(uint8_t *msg, uint32_t msgLen, uint8_t *output, uint32_t keySum1,
-                   uint32_t keySum2);
-void bounce_unroll_lr(uint8_t *msg, uint32_t msgLen, uint8_t *output, uint32_t keySum);
-void bounce_unroll_rl(uint8_t *msg, uint32_t msgLen, uint8_t *output, uint32_t keySum);
+                   uint32_t keySum2, uint8_t *table);
+void bounce_unroll_lr(uint8_t *msg, uint32_t msgLen, uint8_t *output, uint32_t keySum,
+                      uint8_t *table);
+void bounce_unroll_rl(uint8_t *msg, uint32_t msgLen, uint8_t *output, uint32_t keySum,
+                      uint8_t *table);
