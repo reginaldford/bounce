@@ -1,3 +1,4 @@
+// Read https://github.com/reginaldford/bounce/blob/main/LICENSE for license info
 #include "bounce.h"
 
 // Rolling spreads dependency of every byte to every other byte
@@ -24,7 +25,7 @@ void bounce_roll_lr(uint8_t *msg, uint32_t msgLen, uint8_t *output, uint32_t ini
     output[i] = (msg[i] ^ ((uint8_t *)&sum)[0]);
     for (uint8_t j = 1; j < 4; j++)
       output[i] ^= ((uint8_t *)&sum)[j];
-    sum = sum + SQ(SQ(table[msg[i]])) + i;
+    sum = sum + SQ(SQ(table[msg[i]])) + table[i];
   }
 }
 
@@ -36,7 +37,7 @@ void bounce_roll_rl(uint8_t *msg, uint32_t msgLen, uint8_t *output, uint32_t ini
     output[i] = (msg[i] ^ ((uint8_t *)&sum)[0]);
     for (uint8_t j = 1; j < 4; j++)
       output[i] ^= ((uint8_t *)&sum)[j];
-    sum = sum + SQ(SQ(table[msg[i]])) + i;
+    sum = sum + SQ(SQ(table[msg[i]])) + table[i];
   }
 }
 
@@ -48,7 +49,7 @@ void bounce_unroll_lr(uint8_t *msg, uint32_t msgLen, uint8_t *output, uint32_t i
     output[i] = (msg[i] ^ ((uint8_t *)&sum)[0]);
     for (uint8_t j = 1; j < 4; j++)
       output[i] ^= ((uint8_t *)&sum)[j];
-    sum = sum + SQ(SQ(table[output[i]])) + i;
+    sum = sum + SQ(SQ(table[output[i]])) + table[i];
   }
 }
 
@@ -60,6 +61,6 @@ void bounce_unroll_rl(uint8_t *msg, uint32_t msgLen, uint8_t *output, uint32_t i
     output[i] = (msg[i] ^ ((uint8_t *)&sum)[0]);
     for (uint8_t j = 1; j < 4; j++)
       output[i] ^= ((uint8_t *)&sum)[j];
-    sum = sum + SQ(SQ(table[output[i]])) + i;
+    sum = sum + SQ(SQ(table[output[i]])) + table[i];
   }
 }

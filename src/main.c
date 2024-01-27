@@ -1,5 +1,4 @@
 // Read https://github.com/reginaldford/bounce/blob/main/LICENSE for license info
-
 #include "bounce.h"
 
 void bounceGiveHelp(char **args) {
@@ -18,7 +17,7 @@ void bounceGiveHelp(char **args) {
     clear  = "\033[0m";
   }
 
-  printf("Bounce v0.0691\n");
+  printf("Bounce v0.0692\n");
   printf("Copyright (c) 2024 Rex Ford\n");
   printf("%s", blue);
   printf("Source code and BSD license is at github.com/reginaldford/bounce\n\n");
