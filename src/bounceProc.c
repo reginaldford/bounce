@@ -9,7 +9,7 @@ void bounceProcess(FILE *inFile, FILE *outFile, uint8_t *key, bool decryptFlag) 
   uint32_t keySum2 = bounceProcKeySum(key + 128);
   // Invertable Swap table generated from key
   static uint8_t table[256];
-  bounceProcSubTable(key, table);
+  bounceTableInit(key, table);
   // Input buffer
   static uint8_t buffer[256];
   // Output buffer
@@ -57,7 +57,7 @@ void bounceREPL(uint8_t *key, int decryptFlag) {
   uint32_t keySum2 = bounceProcKeySum(key + 128);
   // Invertable Swap table generated from key
   static uint8_t table[256];
-  bounceProcSubTable(key, table);
+  bounceTableInit(key, table);
   while (fgets((char *)input, 501, stdin)) {
     // Read user input, removing newline char
     uint32_t len = strlen((char *)input) - 1;

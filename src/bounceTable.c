@@ -20,11 +20,11 @@ void maybe_swap(uint8_t *table, uint32_t a1, uint32_t b1) {
 }
 
 // Creates a random byte substitution table based on the key.
-void bounceProcSubTable(uint8_t *key, uint8_t *table) {
-  // Setting table to [ 255 254 ... 0 ]
-  // Notice that table[ table [ i ] ] = i for all x
+void bounceTableInit(uint8_t *key, uint8_t *table) {
+  // Setting table to [ 128...0, 255...129 ]
   for (int i = 0; i < 256; i++)
-    table[i] = 256 - i;
+    table[i] = 128 - i;
+  // Notice that table[ table [ i ] ] = i for all x
   // Swapping element pairs of table based on the key
   for (int i = 0; i + 1 < 128; i++) {
     maybe_swap(table, key[2 * i], key[2 * i + 1]);

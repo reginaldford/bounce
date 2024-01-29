@@ -42,7 +42,7 @@ void bounceGenKey(FILE *outputFile) {
   int     keySum1 = bounceProcKeySum(buffer);
   int     keySum2 = bounceProcKeySum(buffer + 128);
   uint8_t table[256];
-  bounceProcSubTable(buffer, table);
+  bounceTableInit(buffer, table);
   // Using buffer as msg and key
   // The key mutates as we encrypt, bc the key is the output. Irreversible.
   bounce_encrypt(buffer, 256, buffer, keySum1, keySum2, table, buffer);

@@ -51,4 +51,4 @@ void bounce_unroll_lr(uint8_t *msg, uint32_t msgLen, uint8_t *output, uint32_t k
 void bounce_unroll_rl(uint8_t *msg, uint32_t msgLen, uint8_t *output, uint32_t keySum,
                       uint8_t *table);
 // bounceTable.c
-void bounceProcSubTable(uint8_t *key, uint8_t *table);
+void bounceTableInit(uint8_t *key, uint8_t *table);
