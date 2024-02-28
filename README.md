@@ -1,6 +1,6 @@
 # Bounce Encryption Tool
 
-Bounce is an open-source symmetric encryption program designed to be easy to read, yet powerful for modern POSIX environments. Bounce is for encrypting files of any size and small messages. Bounce is released under the BSD 2-Clause License. Binary executables are available in the releases section.
+Bounce is an open-source symmetric encryption tool. The algorithm is easy to read. Bounce is for encrypting files of any size and small messages. Bounce is released under the BSD 2-Clause License. Binary executables are available in the releases section.
 
 ## Key Features
 - Readable code. It's designed to be trustworthy, and without unnecessary steps.
