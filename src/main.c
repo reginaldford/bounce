@@ -89,6 +89,10 @@ int main(int num_args, char **args) {
     }
   }
 
+  if (inFilePath && outFilePath && !strcmp(inFilePath, outFilePath)) {
+    printf("Output file must be different from input file.\n");
+    return 1;
+  }
   // If no flags were used, let's give help info
   if (optionsWereUsed == 0) {
     bounceGiveHelp(args);
