@@ -6,7 +6,7 @@
 uint8_t *bounce_encrypt(uint8_t *msg, uint32_t msgLen, uint8_t *key, uint32_t keySum1,
                         uint32_t keySum2, uint8_t *table, uint8_t *output) {
   uint8_t buffer[msgLen];
-  bounce_roll(msg, msgLen, buffer, keySum1, keySum2, table);
+  bounce_roll(msg, msgLen, buffer, keySum1, keySum2, table, key);
   bounce_encrypt_pass(buffer, msgLen, key, table, output);
   return output;
 }
@@ -16,7 +16,7 @@ uint8_t *bounce_decrypt(uint8_t *msg, uint32_t msgLen, uint8_t *key, uint32_t ke
                         uint32_t keySum2, uint8_t *table, uint8_t *output) {
   uint8_t buffer[msgLen];
   bounce_decrypt_pass(msg, msgLen, key, table, buffer);
-  bounce_unroll(buffer, msgLen, output, keySum1, keySum2, table);
+  bounce_unroll(buffer, msgLen, output, keySum1, keySum2, table, key);
   return output;
 }
 
