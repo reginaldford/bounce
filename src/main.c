@@ -16,12 +16,10 @@ void bounceGiveHelp(char **args) {
     green  = "\033[32m";
     clear  = "\033[0m";
   }
-
-  printf("Bounce v0.0696\n");
-  printf("Copyright (c) 2024 Rex Ford\n");
-  printf("%s", blue);
-  printf("Source code and BSD license is at github.com/reginaldford/bounce\n\n");
+  printf("Bounce v0.7\n");
   printf("%s", green);
+  printf("Copyright (c) 2024 Reginald Ford\n");
+  printf("%s", blue);
   printf("Uses and examples:\n");
   printf("%s", clear);
   printf("1. Generate a key:\n");
