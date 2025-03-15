@@ -14,8 +14,10 @@ void swap(uint8_t *table, uint32_t a1, uint32_t b1) {
 
 // If the swap can keep table[ table [ i ] ] = i for all i, do the swap
 void maybe_swap(uint8_t *table, uint32_t a1, uint32_t b1) {
+  // On rare occasions, these coincidences can cause the swap to fail
   if (!(a1 == b1 || a1 == table[a1] || b1 == table[b1] || table[a1] == table[b1] ||
-        a1 == table[b1]))
+        a1 == table[b1]) ||
+      b1 == table[a1])
     swap(table, a1, b1);
 }
 
